@@ -8,7 +8,7 @@ tags:
   - js
 ---
 
-I had a great time solving [the latest challenge](https://piccalil.li/blog/challenge-008-progress-stepper/) from Andy Bell's Front-End Challenges Club! I'm looking forward to see how he solved it, but [here's my solution ](/demos/front-end-cc-008/) and some notes on my approach.
+I had a great time solving [the latest challenge](https://piccalil.li/blog/challenge-008-progress-stepper/) from Andy Bell's Front-End Challenges Club! I'm looking forward to see how he implemented it, but [here's my solution ](/demos/front-end-cc-008/) and some notes on my approach.
 
 ## Using an ordered list
 
@@ -26,11 +26,11 @@ This brief seemed like a great use case for an ordered list.
 </ol>
 ```
 
-I tweaked the copy a bit so I had both long and short text to work with. I also chose to use the [aria-current](https://www.w3.org/TR/wai-aria-1.1/#aria-current) attribute to indicate the current step. The checkmark styling will indicate this visually, but this attribute is needed so that all users understand what the current step is.
+I tweaked the copy a bit so I had both long and short text to work with. I also chose to use the [aria-current](https://www.w3.org/TR/wai-aria-1.1/#aria-current) attribute to indicate the current step. The checkmark styling will indicate this visually, but this attribute indicates to screen readers what the current step is.
 
-I had previously only seen this attribute used to indicate the current page in a list of navigation links, but this seemed like a great use-case as well. Adding this attribute has NVDA announce "current step Payment" while navigating through the list items.
+I had previously only seen this attribute used to indicate the current page in a list of navigation links, but this seemed like a great use-case as well. Adding this attribute has NVDA announce "current step Payment" while navigating through the list items. However, I still need to test with other screen readers to make sure this works the same way. If it does not, some visually hidden text may need to be used instead.
 
-At this point, without any styling or scripting, we have a solid HTML foundation that works great with screen readers. There's no visual indication as to what the current step is, but we'll get to that next.
+At this point, without any styling or scripting, we have a solid HTML foundation that is accessible by default. There's no visual indication as to what the current step is, but we'll get to that next.
 
 ## Augmenting the HTML with JavaScript
 
@@ -57,7 +57,7 @@ I set `aria-hidden` on both the checkmark SVG and the counter text to hide them 
 
 ### Using data attributes for styling
 
-I also set a `data-state` attribute on the `<li>` to indicate whether it is a previous, current, or upcoming step. [This is taken from the CUBE CSS methodology](https://piccalil.li/cube-css/exception/), also by Andy Bell. This gives us a hook that can be used by CSS and JavaScript. This attribute is set based on the presence of the `aria-current` attribute, which ensures the stepper is accessible by default.
+I also set a `data-state` attribute on the `<li>` to indicate whether it is a previous, current, or upcoming step. [This is taken from the CUBE CSS methodology](https://piccalil.li/cube-css/exception/), also by Andy Bell. This gives us a hook that can be used by CSS and JavaScript. This attribute is set based on the presence of the `aria-current` attribute, which ensures that the attribute doesn't get forgotten.
 
 The JavaScript sets it...
 
@@ -148,7 +148,7 @@ However, note that I look for the presence of a data attribute. This way, we do 
 progressList.dataset.init = true;
 ```
 
-How does Safari behave?
+Also note that doing this removes the list semantics when using VoiceOver, so I set `role=list` on the parent list [as mentioned by Scott O'Hara](https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html).
 
 ## Styling
 
