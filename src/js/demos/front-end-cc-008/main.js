@@ -1,5 +1,6 @@
 function initProgressList() {
   const progressList = document.querySelector('.progress');
+  progressList.setAttribute('role', 'list');
   progressList.dataset.init = true; // so we do not remove the list marker if javascript is disabled
 
   const listItems = document.querySelectorAll('.progress li');
