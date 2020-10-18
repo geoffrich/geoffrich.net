@@ -126,6 +126,8 @@ function initForm() {
   incrementButton.addEventListener('click', increment);
   const decrementButton = document.querySelector('button#decrement');
   decrementButton.addEventListener('click', decrement);
+  const deleteButton = document.querySelector('button#delete');
+  deleteButton.addEventListener('click', () => form.remove());
 }
 
 initProgressList();
