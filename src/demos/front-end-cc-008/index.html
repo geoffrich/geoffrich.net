@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Front-End Challenges Club #8</title>
+    <link rel="stylesheet" href="/css/demos/front-end-cc-008/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Asap:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <main>
+      <form>
+        <label for="step">New item</label>
+        <input type="text" id="step" required />
+        <div class="buttons">
+          <button type="button">Add another!</button>
+          <button type="button" id="increment">Increment step</button>
+          <button type="button" id="decrement">Decrement step</button>
+        </div>
+      </form>
+
+      <ol class="progress">
+        <li>Your basket</li>
+        <li>
+          Your details and also some other stuff you probably skipped over
+        </li>
+        <li aria-current="step">Payment</li>
+        <li>Order complete (no turning back now)</li>
+        <li>Crushing regret</li>
+      </ol>
+    </main>
+
+    <script src="/js/demos/front-end-cc-008/main.js"></script>
+  </body>
+</html>
