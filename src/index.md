@@ -1,9 +1,10 @@
 ---
 layout: home
-title: Geoff Rich's personal site
-metaDesc: ""
+title: Home
+metaDesc: ''
 postsHeading: Latest posts
 archiveButtonText: See all posts
-socialImage: ""
+socialImage: ''
 ---
+
 More to come.
