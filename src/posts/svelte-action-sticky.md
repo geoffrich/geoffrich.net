@@ -9,9 +9,14 @@ tags:
 templateEngineOverride: md
 ---
 
-# Detecting sticky positioning with Svelte actions
+TODO:
 
-Link to REPL
+- Link to REPL
+- REPL height on mobile devices
+- GIF a11y
+- Check for inclusive language w/ 11ty plugin
+- Only include REPL script on this page
+- iframe not going into mobile mode
 
 <button 
   class="[ button ] [ font-base text-base weight-bold ]" 
@@ -217,7 +222,15 @@ We can go one step further and update the styling of the element when the sticki
 
 ```
 
-Now we are setting the `data-stuck` attribute to the value of `isSticking`. This lets us target it in our CSS. You could also use the `class:` directive here instead depending on personal preference.
+Now we are setting the `data-stuck` attribute to the value of `isSticking`. This lets us target it in our CSS. You could also use the `class:` directive here instead, depending on personal preference. Using data attributes for state changes comes from [the CUBE CSS methodology](https://piccalil.li/cube-css/exception/).
+
+Looks great! Unfortunately, we have a bug when we have multiple sticky elements on the page. Depending on your CSS, when scrolling down you may see a brief flash of the "stuck" styles on the heading coming into view. I changed the sticky colors to black and white and set a transition duration of 2 seconds to make it very clear. See the GIF below.
+
+![Sticky styles briefly applied when scrolling down](/images/svelte-action-sticky/sticky-css-bug.gif)
+
+Aside goes here linking to tweet thread on accessible gifs.
+
+So what's happening here? In our sticky action, we set isStuck based on the visibility of the top sentinel. When the page loads, the sentinel for the second heading is out of view, so the second heading applies the stuck styles. When we scroll down, the sentinel comes into view and the stuck styles are removed. In our case, since the transition happens over 2 seconds, it is very clear what is going on.
 
 ## Covering edge cases
 
