@@ -17,6 +17,8 @@ TODO:
 - Check for inclusive language w/ 11ty plugin
 - Only include REPL script on this page
 - iframe not going into mobile mode
+- link to Twitter thread (time to update username)
+- should I host my profile image on Twitter?
 
 <button 
   class="[ button ] [ font-base text-base weight-bold ]" 
@@ -191,7 +193,7 @@ There's a bit more going on here, so let's break it down.
 
 Our script tag is pretty slim -- we import our sticky action and define a state variable `isSticking` and a function `stickyCallback` to update that variable.
 
-In our markup, we can use the action we created earlier with `use:sticky` and pass in the action parameters. When the `h2` is added to the DOM, the action will automatically set up the intersection observers and execute the callback when the stickiness of the element changes. Executing the callback will update the state variable and we can dynamically show whether the element is sticking or not. Pretty neat!
+In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. When the `h2` is added to the DOM, the action will automatically set up the intersection observers with the callback we provided. Executing the callback will update the state variable and we can dynamically show whether the element is sticking or not. Pretty neat!
 
 We can go one step further and update the styling of the element when the stickiness changes.
 

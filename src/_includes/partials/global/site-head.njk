@@ -9,5 +9,21 @@
       {% set ariaLabel = 'navigation' %}
       {% include "partials/components/nav.njk" %}
     </div>
+    <button class="js-theme">Change theme</button>
+    <script>
+      // TODO: move into separate file (component?)
+      // TODO: persist theme
+      // TODO: get themes from data
+      // TODO: dynamic favicon + logo
+      const themeButton = document.querySelector('.js-theme');
+      themeButton.addEventListener('click', changeTheme);
+      const themes = ['mario', 'samus', 'pikachu', 'mega-man', 'default'];
+      let startIndex = 0;
+      function changeTheme() {
+        document.documentElement.setAttribute('data-theme', themes[startIndex]);
+        themeButton.innerText = `Change Theme (current: ${themes[startIndex]})`;
+        startIndex = (startIndex + 1) % themes.length;
+      }
+    </script>
   </div>
 </header>

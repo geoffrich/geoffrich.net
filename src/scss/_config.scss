@@ -14,6 +14,7 @@ $stalfos-size-scale: map-get($tokens, 'size-scale');
  * You can also use them to power borders, fills or shadows, for example.
  */
 $stalfos-colors: map-get($tokens, 'colors');
+$stalfos-themes: map-get($tokens, 'themes');
 
 /**
  * UTIL PREFIX
