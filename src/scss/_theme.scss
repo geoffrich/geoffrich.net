@@ -4,6 +4,10 @@
     #{'--color-' + nth($color, 1)}: #{nth($color, 2)};
   }
 
+  @each $color in $stalfos-themes {
+    #{'--color-theme-' + nth($color, 1)}: #{nth($color, 2)};
+  }
+
   // Set theme aliases
   --color-mode: 'light';
   --color-bg: var(--color-light);

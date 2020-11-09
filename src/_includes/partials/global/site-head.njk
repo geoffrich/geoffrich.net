@@ -9,20 +9,26 @@
       {% set ariaLabel = 'navigation' %}
       {% include "partials/components/nav.njk" %}
     </div>
-    <button class="js-theme">Change theme</button>
+
+    <fieldset class="js-theme">
+      <legend>Theme color
+      {% for themeName, color in tokens.themes %}
+      <label for="theme-{{ themeName }}">
+        <input type="radio" {{ "checked" if (themeName == "default")}} name="theme" value="{{ themeName }}" id="theme-{{ themeName }}">
+          <span class="theme-option-text" data-theme="{{ themeName }}">
+            {{ themeName }}
+          </span>
+        </label>
+      {% endfor %}
+    </fieldset>
     <script>
       // TODO: move into separate file (component?)
       // TODO: persist theme
-      // TODO: get themes from data
       // TODO: dynamic favicon + logo
-      const themeButton = document.querySelector('.js-theme');
-      themeButton.addEventListener('click', changeTheme);
-      const themes = ['mario', 'samus', 'pikachu', 'mega-man', 'default'];
-      let startIndex = 0;
-      function changeTheme() {
-        document.documentElement.setAttribute('data-theme', themes[startIndex]);
-        themeButton.innerText = `Change Theme (current: ${themes[startIndex]})`;
-        startIndex = (startIndex + 1) % themes.length;
+      const themeRadioset = document.querySelector('.js-theme');
+      themeRadioset.addEventListener('change', changeTheme);
+      function changeTheme(e) {
+        document.documentElement.setAttribute('data-theme', e.target.value);
       }
     </script>
   </div>

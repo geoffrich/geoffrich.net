@@ -19,6 +19,8 @@ TODO:
 - iframe not going into mobile mode
 - link to Twitter thread (time to update username)
 - should I host my profile image on Twitter?
+- @11tyrocks/eleventy-plugin-social-images
+- focus-visible
 
 <button 
   class="[ button ] [ font-base text-base weight-bold ]" 
