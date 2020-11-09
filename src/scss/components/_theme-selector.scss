@@ -1,0 +1,8 @@
+.theme-selector {
+  @each $color in $stalfos-themes {
+    $theme-name: nth($color, 1);
+    &__text[data-theme='#{$theme-name}'] {
+      border-bottom: 3px solid var(--color-theme-#{$theme-name});
+    }
+  }
+}

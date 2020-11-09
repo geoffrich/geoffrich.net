@@ -10,25 +10,40 @@
       {% include "partials/components/nav.njk" %}
     </div>
 
-    <fieldset class="js-theme">
-      <legend>Theme color
+    <fieldset class="theme-selector">
+      <legend>Theme color</legend>
       {% for themeName, color in tokens.themes %}
       <label for="theme-{{ themeName }}">
-        <input type="radio" {{ "checked" if (themeName == "default")}} name="theme" value="{{ themeName }}" id="theme-{{ themeName }}">
-          <span class="theme-option-text" data-theme="{{ themeName }}">
+        <input class="theme-selector__option" type="radio" {{ "checked" if (themeName == "default")}} name="theme" value="{{ themeName }}" id="theme-{{ themeName }}">
+          <span class="theme-selector__text" data-theme="{{ themeName }}">
             {{ themeName }}
           </span>
         </label>
       {% endfor %}
     </fieldset>
+    <theme-toggle></theme-toggle>
     <script>
       // TODO: move into separate file (component?)
       // TODO: persist theme
       // TODO: dynamic favicon + logo
-      const themeRadioset = document.querySelector('.js-theme');
-      themeRadioset.addEventListener('change', changeTheme);
-      function changeTheme(e) {
-        document.documentElement.setAttribute('data-theme', e.target.value);
+      const themeRadioset = document.querySelector('.theme-selector');
+      themeRadioset.addEventListener('change', handleChange);
+
+      const themeKey = 'theme';
+      const selectedTheme = localStorage.getItem(themeKey);
+      if (selectedTheme) {
+        const radioToSelect = document.querySelector(`.theme-selector__option[value=${selectedTheme}`);
+        radioToSelect.checked = true;
+        changeTheme(selectedTheme);
+      }
+
+      function handleChange(e) {
+        changeTheme(e.target.value);
+      }
+
+      function changeTheme(themeName) {
+        document.documentElement.setAttribute('data-theme', themeName);
+        localStorage.setItem(themeKey, themeName);
       }
     </script>
   </div>
