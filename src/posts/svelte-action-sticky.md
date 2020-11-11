@@ -27,6 +27,8 @@ TODO:
   - https://css-tricks.com/svg-favicons-and-all-the-fun-things-we-can-do-with-them/
   - https://css-tricks.com/emojis-as-favicons/
 - SR testing
+- favicon fallback
+- don't lazy-load profile image
 
 <button 
   class="[ button ] [ font-base text-base weight-bold ]" 

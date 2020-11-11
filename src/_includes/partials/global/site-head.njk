@@ -30,42 +30,5 @@
       </fieldset>
       <theme-toggle></theme-toggle>
     </div>
-    
-    <script>
-      // TODO: move into separate file (component?)
-      // TODO: persist theme
-      // TODO: dynamic favicon + logo
-      const themeToggle = document.querySelector('.theme-selector-toggle');
-      themeToggle.addEventListener('click', toggleThemeSelector);
-      const themeRadioset = document.querySelector('.theme-selector');
-      themeRadioset.addEventListener('change', handleChange);
-
-      const themeKey = 'theme';
-      const selectedTheme = localStorage.getItem(themeKey);
-      if (selectedTheme) {
-        const radioToSelect = document.querySelector(`.theme-selector__option[value=${selectedTheme}`);
-        radioToSelect.checked = true;
-        changeTheme(selectedTheme);
-      }
-
-      function toggleThemeSelector() {
-        if (themeRadioset.dataset.state === 'closed') {
-          themeRadioset.dataset.state = 'open';
-          themeToggle.setAttribute('aria-expanded', 'true');
-        } else {
-          themeRadioset.dataset.state = 'closed';
-          themeToggle.setAttribute('aria-expanded', 'false');
-        }
-      }
-
-      function handleChange(e) {
-        changeTheme(e.target.value);
-      }
-
-      function changeTheme(themeName) {
-        document.documentElement.setAttribute('data-theme', themeName);
-        localStorage.setItem(themeKey, themeName);
-      }
-    </script>
   </div>
 </header>
