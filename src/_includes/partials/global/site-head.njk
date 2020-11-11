@@ -8,9 +8,13 @@
       </a>
       {% set ariaLabel = 'navigation' %}
       {% include "partials/components/nav.njk" %}
+      <button class="[ button theme-selector-toggle ] [ text-600 bg-primary ] " aria-expanded="false">
+        <span class="visually-hidden">Toggle theme selector</span>
+        {% include "icons/paint.svg" %}
+      </button>
     </div>
 
-    <fieldset class="theme-selector">
+    <fieldset class="theme-selector" data-state="closed">
       <legend>Theme color</legend>
       {% for themeName, color in tokens.themes %}
       <label for="theme-{{ themeName }}">
@@ -20,12 +24,15 @@
           </span>
         </label>
       {% endfor %}
+      <theme-toggle></theme-toggle>
     </fieldset>
-    <theme-toggle></theme-toggle>
+    
     <script>
       // TODO: move into separate file (component?)
       // TODO: persist theme
       // TODO: dynamic favicon + logo
+      const themeToggle = document.querySelector('.theme-selector-toggle');
+      themeToggle.addEventListener('click', toggleThemeSelector);
       const themeRadioset = document.querySelector('.theme-selector');
       themeRadioset.addEventListener('change', handleChange);
 
@@ -35,6 +42,16 @@
         const radioToSelect = document.querySelector(`.theme-selector__option[value=${selectedTheme}`);
         radioToSelect.checked = true;
         changeTheme(selectedTheme);
+      }
+
+      function toggleThemeSelector() {
+        if (themeRadioset.dataset.state === 'closed') {
+          themeRadioset.dataset.state = 'open';
+          themeToggle.setAttribute('aria-expanded', 'true');
+        } else {
+          themeRadioset.dataset.state = 'closed';
+          themeToggle.setAttribute('aria-expanded', 'false');
+        }
       }
 
       function handleChange(e) {

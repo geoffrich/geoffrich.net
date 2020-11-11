@@ -17,10 +17,15 @@ TODO:
 - Check for inclusive language w/ 11ty plugin
 - Only include REPL script on this page
 - iframe not going into mobile mode
-- link to Twitter thread (time to update username)
+- link to Twitter thread
 - should I host my profile image on Twitter?
 - @11tyrocks/eleventy-plugin-social-images
 - focus-visible
+- theme switcher - https://mxb.dev/blog/color-theme-switcher/
+- SVG favicon
+  - https://fonts.google.com/specimen/Katibeh?sidebar.open=true&selection.family=Katibeh#standard-styles
+  - https://css-tricks.com/svg-favicons-and-all-the-fun-things-we-can-do-with-them/
+  - https://css-tricks.com/emojis-as-favicons/
 
 <button 
   class="[ button ] [ font-base text-base weight-bold ]" 
