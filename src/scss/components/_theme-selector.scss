@@ -6,8 +6,12 @@
     }
   }
 
+  max-height: 300px;
+  transition: max-height 0.2s linear, visibility 0.2s linear;
+
   &[data-state='closed'] {
-    display: none;
+    visibility: hidden;
+    max-height: 0;
   }
 }
 

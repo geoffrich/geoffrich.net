@@ -26,6 +26,7 @@ TODO:
   - https://fonts.google.com/specimen/Katibeh?sidebar.open=true&selection.family=Katibeh#standard-styles
   - https://css-tricks.com/svg-favicons-and-all-the-fun-things-we-can-do-with-them/
   - https://css-tricks.com/emojis-as-favicons/
+- SR testing
 
 <button 
   class="[ button ] [ font-base text-base weight-bold ]" 
