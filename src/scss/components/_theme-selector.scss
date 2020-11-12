@@ -22,7 +22,7 @@
   position: relative;
   overflow: hidden;
 
-  &:focus:not(:hover) {
+  &:focus {
     outline-color: var(--color-theme-primary-glare);
     outline-offset: 4px;
   }
