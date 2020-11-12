@@ -5,7 +5,7 @@
     <div class="[ intro__summary ] [ sf-flow ] [ leading-mid measure-short ]">{{ introSummary | safe }}</div>
     {% endif %}
     {% if introImage %}
-    <img class="[ intro__image ]" src="{{ introImage }}" alt="Geoff Rich">
+    <img class="[ intro__image ]" src="{{ introImage.src }}" alt="{{ introImage.alt }}">
     {% endif %}
   </div>
 </header>

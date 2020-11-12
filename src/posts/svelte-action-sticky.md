@@ -11,30 +11,15 @@ templateEngineOverride: md
 
 TODO:
 
-- Link to REPL
-- REPL height on mobile devices
 - GIF a11y
 - Check for inclusive language w/ 11ty plugin
-- Only include REPL script on this page
-- iframe not going into mobile mode
 - link to Twitter thread
 - should I host my profile image on Twitter?
 - @11tyrocks/eleventy-plugin-social-images
-- focus-visible
-- theme switcher - https://mxb.dev/blog/color-theme-switcher/
-- SVG favicon
-  - https://fonts.google.com/specimen/Katibeh?sidebar.open=true&selection.family=Katibeh#standard-styles
-  - https://css-tricks.com/svg-favicons-and-all-the-fun-things-we-can-do-with-them/
-  - https://css-tricks.com/emojis-as-favicons/
 - SR testing
 - favicon fallback
-- don't lazy-load profile image
 
-<button 
-  class="[ button ] [ font-base text-base weight-bold ]" 
-  data-repl="https://svelte.dev/repl/4ad71e00c86c47d29806e17f09ff0869?version=3">
-Load REPL
-</button>
+[Link to REPL](https://svelte.dev/repl/4ad71e00c86c47d29806e17f09ff0869?version=3)
 
 ## What do we want to do?
 
