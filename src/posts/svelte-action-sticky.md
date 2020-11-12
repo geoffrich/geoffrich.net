@@ -6,7 +6,6 @@ tags:
   - html
   - css
   - js
-templateEngineOverride: md
 ---
 
 TODO:
@@ -18,6 +17,7 @@ TODO:
 - @11tyrocks/eleventy-plugin-social-images
 - SR testing
 - favicon fallback
+- automatically apply {% raw %} {% raw %} {% endraw %} to code blocks
 
 [Link to REPL](https://svelte.dev/repl/4ad71e00c86c47d29806e17f09ff0869?version=3)
 
@@ -72,6 +72,8 @@ export default function sticky(node, {callback, stickToTop}) {
 
 Used like so:
 
+{% raw %}
+
 ```svelte
 <h2
   class="sticky"
@@ -79,6 +81,8 @@ Used like so:
   I use position: sticky!
 </h2>
 ```
+
+{% endraw %}
 
 ### Create and observe sentinel elements
 
@@ -132,6 +136,8 @@ This is a basic implementation. It has some bugs, but it works well enough to st
 
 First, let's see how far we can get with just CSS and HTML.
 
+{% raw %}
+
 ```svelte
 <style>
   .sticky {
@@ -152,11 +158,15 @@ First, let's see how far we can get with just CSS and HTML.
 </section>
 ```
 
+{% endraw %}
+
 Presto! Render that HTML and you'll see a sticky header that stays visible when we scroll, no additional JavaScript required. My REPL has some extra styling, but this has the really essential stuff. This goes to show how far you can get with modern CSS these days. It's also a progressive enhancement for older browsers -- if they don't support position: sticky, the header will scroll with the rest of the page.
 
 Note -- `h2` is not the correct heading level to use if this is the only thing on your page. In my demo, this is being placed in a larger page that contains an `h1`.
 
 However, if you want to change something about the element or component when it's sticking to the top of the screen, you need to bring in some JavaScript. Let's add a script tag and update our markup a bit.
+
+{% raw %}
 
 ```svelte
 <script>
@@ -184,6 +194,8 @@ However, if you want to change something about the element or component when it'
 </section>
 ```
 
+{% endraw %}
+
 There's a bit more going on here, so let's break it down.
 
 Our script tag is pretty slim -- we import our sticky action and define a state variable `isSticking` and a function `stickyCallback` to update that variable.
@@ -191,6 +203,8 @@ Our script tag is pretty slim -- we import our sticky action and define a state 
 In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. When the `h2` is added to the DOM, the action will automatically set up the intersection observers with the callback we provided. Executing the callback will update the state variable and we can dynamically show whether the element is sticking or not. Pretty neat!
 
 We can go one step further and update the styling of the element when the stickiness changes.
+
+{% raw %}
 
 ```svelte
 <script>
@@ -216,8 +230,9 @@ We can go one step further and update the styling of the element when the sticki
 
   <!-- Lorem ipsum text truncated for readability -->
 </section>
-
 ```
+
+{% endraw %}
 
 Now we are setting the `data-stuck` attribute to the value of `isSticking`. This lets us target it in our CSS. You could also use the `class:` directive here instead, depending on personal preference. Using data attributes for state changes comes from [the CUBE CSS methodology](https://piccalil.li/cube-css/exception/).
 
