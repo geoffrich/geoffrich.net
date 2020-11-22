@@ -1,6 +1,6 @@
 ---
 title: Detecting sticky positioning with Svelte actions
-date: '2020-11-04'
+date: '2020-11-24'
 tags:
   - svelte
   - html
@@ -17,64 +17,63 @@ TODO:
 - @11tyrocks/eleventy-plugin-social-images
 - SR testing
 - favicon fallback
-- automatically apply {% raw %} {% raw %} {% endraw %} to code blocks
+- sticky node in middle? should a sentinel be placed directly after a sticky node?
+- upload demo to GH for posterity
 
-[Link to REPL](https://svelte.dev/repl/4ad71e00c86c47d29806e17f09ff0869?version=3)
+`position: sticky` is a CSS property that lets you "stick" an element to the top of the screen when it would normally be scrolled away. However, there is no native way to change the element's styling when it becomes stuck. In this article, I will show you how to detect and style a "stuck" element using an underused feature of the Svelte API: actions.
 
-## What do we want to do?
-
-- detect when a position: sticky element is currently stuck
-- handle when the element is stuck to the top or to the bottom
+If you want to see the end result and don't want to read the explanation, here's my [finished demo](https://svelte.dev/repl/4ad71e00c86c47d29806e17f09ff0869?version=3) in the Svelte REPL.
 
 ## What is position: sticky?
 
-- for the basic case, you don't need any fancy javascript
+TODO: better quote/explanation
 
-### Why is :stuck not built in already?
+Per [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning):
 
-- infinite loops
-- be careful with changing size of sticky element when stuck -- could result in screen jitters
+> A stickily positioned element is treated as relatively positioned until it crosses a specified threshold, at which point it is treated as fixed until it reaches the boundary of its parent.
+
+A common use case is to keep some information in view that would normally be scrolled off screen. For instance, if someone is changing their flight online, you may want to stick their current flight to the top of the screen as they scroll through other flight options. Here are some other examples of [position: sticky in practice](https://mastery.games/post/position-sticky/).
+
+Sticky positioning is supported in the vast majority of browsers ([Can I Use](https://caniuse.com/?search=position%20sticky)). It can generally be used as a progressive enhancement -- if your browser doesn't support it, it will gracefully fallback to regular positioning.
+
+## How do I change the appearance of an element when it becomes stuck?
+
+You can't (at least not natively), and this is intentional. If you had a `:stuck` selector, you could easily write a rule that would result in an infinite loop. For instance, look at the following:
+
+```css
+:stuck {
+  position: static;
+}
+```
+
+You can find a more detailed discussion of the issue on the [CSS Working Group wiki](https://wiki.csswg.org/faq#selectors-that-depend-on-layout). If you want to change styling when an element becomes stuck, you're going to have to implement it yourself with JavaScript. You should still be careful, as you can run into similar issues on your own. Getting this wrong could result in a jittering screen that is very unpleasant for the user.
+
+I will show you how to detect a "stuck" element using Svelte actions, though it could easily be written without a framework as well. If you are using Svelte, writing it as an action will allow this functionality to be re-used in any component you want with minimal boilerplate.
 
 ## What is a Svelte action?
 
-### Why use a Svelte action?
+A Svelte action is a function that runs when a node is rendered into the DOM. They're commonly used for adding custom event handling logic or interfacing with external libraries, but the sky's the limit! You can do anything you want to the node inside that function. I recommend looking at the [Svelte tutorial](https://svelte.dev/tutorial/actions) or [Kirill Vasiltsov's post](https://dev.to/virtualkirill/unlocking-the-power-of-svelte-actions-1k29) on them to learn more.
 
-- reusability
-- puts the imperative code in one place
-
-## General approach
-
-- Add top and bottom "sentinel" divs to detect when an element becomes stuck
-- Observe using intersection observer
-  - If the top sentinel exits the viewport, then a top position: sticky element is currently stuck
-  - If the bottom sentinel exits the viewport, then a bottom position: sticky element is currently stuck
-  - gif goes here
-  - In vanilla JS you might toggle a class or attribute on the element when this happens. Since Svelte automically scopes styles, it would be hard to target this since Svelte would think the styles are "unused". Also, devs new to the code might not know where that attribute/class is set. Instead, we'll execute a callback passed to the Svelte action.
-
-## Writing the action
-
-### Set up action
+Writing our sticky functionality as an action lets us put all the imperative DOM code in one place that can be reused by multiple components. Here's what an action looks like in practice. All you need is a function that takes two arguments: a node and an (optional object of parameters).
 
 ```js
 // sticky.js
 export default function sticky(node, {callback, stickToTop}) {
   // do stuff
-  return {
-    update() {},
-    destroy() {}
-  };
 }
 ```
 
-- Basic action format
-- Action takes a node (the node `use:` is on) and an (optional) object of parameters
-- Two parameters: callback (executed when stickiness changes) and stickToTop (whether the node will be stuck to the top or bottom)
+For our use case, we want two parameters: a callback (executed when stickiness changes) and stickToTop (whether the node will be stuck to the top or bottom). We'll go into how we'll use these parameters later.
 
-Used like so:
+One you have your action, you can attach it to a node with `use`.
 
 {% raw %}
 
 ```svelte
+<script>
+  import sticky from "./sticky";
+</script>
+
 <h2
   class="sticky"
   use:sticky={{ callback: stickyCallback, stickToTop: true }}>
@@ -84,9 +83,15 @@ Used like so:
 
 {% endraw %}
 
-### Create and observe sentinel elements
+When the `h2` appears in the DOM, the `sticky` function will run and we'll be off to the races!
 
-Inside our `sticky` function, we add sentinel divs to the top and bottom of the parent
+## Detecting stickiness
+
+The way we'll detecting our node becoming stuck is with two "sentinel" divs: one at the top of the node's parent and one at the bottom. If the top sentinel exits the viewport, then a top position: sticky element is currently stuck. If the bottom sentinel exits the viewport, then a bottom position: sticky element is currently stuck.
+
+TODO: VISUAL EXAMPLE HERE
+
+First, let's create our sentinel divs inside our `sticky` function.
 
 ```js
 const stickySentinelTop = document.createElement('div');
@@ -98,9 +103,11 @@ stickySentinelBottom.classList.add('stickySentinelBottom');
 node.parentNode.append(stickySentinelBottom);
 ```
 
-I add classes to make it clear what they're used for in the dev tools inspector.
+The classes aren't strictly necessary, but they make it clear why the divs are there if you were to notice them in the dev tools inspector.
 
-We then initialize an intersection observer to observe these sentinels.
+We then initialize an Intersection Observer to either observe the top or bottom sentinel, depending on where the sticky node is sticking. We use the `stickToTop` parameter passed to the action to determine this. The [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) allows us to execute a function when a certain node exits or enters the viewport. If the observer fires and the sentinel is outside of the viewport (i.e., not intersecting), then the element must be stuck (asides from an edge case we'll cover later). If the sentinel is in view, then the sticky element cannot be stuck.
+
+Either way, we execute `callback` (passed to the action as a parameter) with an argument that says whether the element is sticking. This callback will be provided by the component using the action and will allow the component to update whatever state it needs to when the node becomes stuck.
 
 ```js
 const intersectionCallback = function(entries) {
@@ -124,13 +131,9 @@ if (stickToTop) {
 }
 ```
 
-If you are not familiar with IntersectionObserver, you can read the docs here. At a high level, an Intersection Observer observes one or more nodes and executes a function when the node's intersection with a root node (usually the viewport) changes. It is very powerful and can often be used as an alternative to a scroll event listener.
+A vanilla JS implementation of this might toggle a class or attribute on the element instead. Since Svelte automically scopes styles, it would be hard to target an external like that in the component CSS since Svelte would think the styles are "unused". Also, devs new to the code might not know where that attribute/class is set. That's why we use a callback here instead.
 
-For our use case, we either observe the top or bottom sentinel, depending on if the sticky node is sticking to the top or bottom, respectively. The Intersection Observer callback will fire when the sentinel enters or leaves the viewport. If the sentinel is not intersecting (it is outside of the viewport), we can assume that the sticky element is currently "stuck" (except for one edge case, see section below). If the sentinel is intersecting, then the sticky element is not sticking. See explanation above.
-
-Either way, we execute the provided callback and pass a flag indicating if the element is currently stuck or not.
-
-This is a basic implementation. It has some bugs, but it works well enough to start using it. We'll circle back to some edge cases and enhancements later in the post, but let's see how we can use this action in a Svelte component.
+This is our basic implementation. It has some bugs, but it works well enough to start using it. We'll circle back to some edge cases and enhancements later in the post, but let's see how we can integrate this action into a Svelte component.
 
 ## Using the action in a Svelte component
 
@@ -160,11 +163,15 @@ First, let's see how far we can get with just CSS and HTML.
 
 {% endraw %}
 
-Presto! Render that HTML and you'll see a sticky header that stays visible when we scroll, no additional JavaScript required. My REPL has some extra styling, but this has the really essential stuff. This goes to show how far you can get with modern CSS these days. It's also a progressive enhancement for older browsers -- if they don't support position: sticky, the header will scroll with the rest of the page.
+Presto! Render that HTML and you'll see a sticky header that stays visible when we scroll, no additional JavaScript required. My REPL has some extra styling, but this has the really essential stuff. It's important to note that you don't need to use JavaScript for basic sticky positioning. It's only when you want to style it differently that you need a little something extra.
 
-Note -- `h2` is not the correct heading level to use if this is the only thing on your page. In my demo, this is being placed in a larger page that contains an `h1`.
+<div class="callout">
 
-However, if you want to change something about the element or component when it's sticking to the top of the screen, you need to bring in some JavaScript. Let's add a script tag and update our markup a bit.
+Note: `h2` is not the correct heading level to use if this is the only thing on your page. In my demo, this is being placed in a larger page that contains an `h1`. You should always [ensure that headings are in a logical order](https://dequeuniversity.com/rules/axe/4.0/heading-order?application=AxeChrome) to aid screen reader navigation.
+
+</div>
+
+If you want to change something about the element or component when it's sticking to the top of the screen, you need to write some JavaScript. Let's add a script tag and update our markup a bit.
 
 {% raw %}
 
@@ -202,7 +209,7 @@ Our script tag is pretty slim -- we import our sticky action and define a state 
 
 In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. When the `h2` is added to the DOM, the action will automatically set up the intersection observers with the callback we provided. Executing the callback will update the state variable and we can dynamically show whether the element is sticking or not. Pretty neat!
 
-We can go one step further and update the styling of the element when the stickiness changes.
+We can also update the styling of the element using that same state variable.
 
 {% raw %}
 
@@ -234,27 +241,141 @@ We can go one step further and update the styling of the element when the sticki
 
 {% endraw %}
 
-Now we are setting the `data-stuck` attribute to the value of `isSticking`. This lets us target it in our CSS. You could also use the `class:` directive here instead, depending on personal preference. Using data attributes for state changes comes from [the CUBE CSS methodology](https://piccalil.li/cube-css/exception/).
+Now we are setting the `data-stuck` attribute to the value of `isSticking`. Using data attributes for state changes comes from [the CUBE CSS methodology](https://piccalil.li/cube-css/exception/). You could set a class using the `class:` directive here instead, depending on personal preference. Either way, you have something to target in your CSS. Now when the element is stuck, the color changes to mintcream 🍦.
 
 Looks great! Unfortunately, we have a bug when we have multiple sticky elements on the page. Depending on your CSS, when scrolling down you may see a brief flash of the "stuck" styles on the heading coming into view. I changed the sticky colors to black and white and set a transition duration of 2 seconds to make it very clear. See the GIF below.
 
 ![Sticky styles briefly applied when scrolling down](/images/svelte-action-sticky/sticky-css-bug.gif)
 
-Aside goes here linking to tweet thread on accessible gifs.
+So what's happening here? In our sticky action, we set `isStuck` based on the visibility of the top sentinel. When the page loads, the sentinel for the second heading is out of view, so the second heading applies the stuck styles. When we scroll down, the sentinel comes into view and the stuck styles are removed.
 
-So what's happening here? In our sticky action, we set isStuck based on the visibility of the top sentinel. When the page loads, the sentinel for the second heading is out of view, so the second heading applies the stuck styles. When we scroll down, the sentinel comes into view and the stuck styles are removed. In our case, since the transition happens over 2 seconds, it is very clear what is going on.
+To fix this, we need to check the Y position before executing the callback. If the sentinel is coming into view from the bottom of the screen but we are observing an element sticking to the top, `isStuck` should be false. Similarly, if the sentinel is coming into view from the top of the screen but we are observing an element sticking to the bottom, `isStuck` should also be false. Here's what that looks like in code.
 
-## Covering edge cases
+```js
+const intersectionCallback = function(entries) {
+  const entry = entries[0];
 
-- Checking Y position
-- Mutation observer
-- update and destroy
+  let isStuck = false;
+  if (!entry.isIntersecting && isValidYPosition(entry)) {
+    isStuck = true;
+  }
 
-## What this doesn't handle
+  callback(isStuck);
+};
 
-- Adding sentinels could break CSS selectors (alternative: rootMargin)
-- Does not support horizontal stickiness (but this wouldn't be too hard to add)
-- Sticky elements in middle of parent?
+const isValidYPosition = function({target, boundingClientRect}) {
+  if (target === stickySentinelTop) {
+    return boundingClientRect.y < 0;
+  } else {
+    return boundingClientRect.y > 0;
+  }
+};
+```
+
+With that change, sticky styling is applied correctly.
+
+## Another edge case: mutations
+
+I encountered another edge while preparing the demo for this blog post -- what happens if the content inside the component moves around? It's important that our sentinel nodes are at the top and bottom of the node's parent, but that is not guaranteed if Svelte is dynamically inserting elements.
+
+For instance, let's say you had some content controlled by a checkbox that toggles `flag`.
+
+{% raw %}
+
+```svelte
+<section>
+  <h2
+      class="sticky"
+      use:sticky={{ callback: stickyCallback, stickToTop: true }}>
+      I use position: sticky!
+  </h2>
+
+  <slot />
+  {#if flag}
+    <p>Me too</p>
+  {/if}
+</section>
+```
+
+{% endraw %}
+
+I found that toggling the value of `flag` would re-insert the node after the bottom sentinel (see below HTML), which could introduce bugs since we expect the bottom sentinel to be the last element in its container.
+
+```html
+<div class="stickySentinelTop"></div>
+<h2 class="sticky svelte-1n1qj7a" data-stuck="false"></h2>
+<div class="stickySentinelBottom"></div>
+<p>Me too</p>
+```
+
+You might not encounter this edge case. In case you do, let's show how we can re-insert the sentinels on changes to the container using a [Mutation Observer](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
+
+## Replacing sentinels on mutations
+
+The Mutation Observer API is similar to the Intersection Observer API -- you observe a node an execute a callback when something changes. Our mutation callback will check if the sentinels are still the first and last child and re-insert them if they're not.
+
+```js
+const mutationCallback = function(mutations) {
+  mutations.forEach(function(mutation) {
+    const {parentNode: topParent} = stickySentinelTop;
+    const {parentNode: bottomParent} = stickySentinelBottom;
+
+    if (stickySentinelTop !== topParent.firstChild) {
+      topParent.prepend(stickySentinelTop);
+    }
+    if (stickySentinelBottom !== bottomParent.lastChild) {
+      bottomParent.append(stickySentinelBottom);
+    }
+  });
+};
+```
+
+We don't have to worry about removing the sentinels before re-inserting them. The DOM will move them to the new location instead of duplicating the node.
+
+Now that we have our callback, we can initialize the Mutation Observer and observe our node's parent. We pass an options object to the `observe` call to indicate that we only care about updates to the list of children.
+
+```js
+const mutationObserver = new MutationObserver(mutationCallback);
+mutationObserver.observe(node.parentNode, {childList: true});
+```
+
+Peachy 🍑. If we try our demo again, we'll see that the sentinels stay in position even when content is added and removed.
+
+## Update and destroy
+
+One last aspect of actions we haven't touched on is the `update` and `destroy` methods. An action can optionally return an object containing these methods. `update` will be called when any of the parameters passed to the action change, and `destroy` will be called when the node is removed from the DOM.
+
+Since my demo allows for toggling between sticking to the top and sticking to the bottom, I had to implement `update` so that we could start observing the other sentinel when `stickToTop` changes. I also disconnected our observers in the `destroy` method, but this [might not be necessary](https://stackoverflow.com/questions/51106261/should-mutationobservers-be-removed-disconnected-when-the-attached-dom-node-is-r/51106262#51106262) if garbage collection handles it.
+
+```js
+return {
+  update({stickToTop}) {
+    // change which sentinel we are observing
+    if (stickToTop) {
+      intersectionObserver.unobserve(stickySentinelBottom);
+      intersectionObserver.observe(stickySentinelTop);
+    } else {
+      intersectionObserver.unobserve(stickySentinelTop);
+      intersectionObserver.observe(stickySentinelBottom);
+    }
+  },
+
+  destroy() {
+    intersectionObserver.disconnect();
+    mutationObserver.disconnect();
+  }
+};
+```
+
+## Some caveats
+
+There's a few caveats to this implementation. Adding raw DOM nodes like this could break certain CSS selectors like `:first-child`. There's another approach using the `rootMargin` property of the observer, but this does not let you set any sort of offset for the sticky element. If this isn't a concern for you, you could update the observer callback to use this method instead. Read more about it at [CSS Tricks](https://css-tricks.com/an-explanation-of-how-the-intersection-observer-watches/#creating-a-position-sticky-event).
+
+We also didn't implement anything for horizontal stickiness. I'll leave that as an exercise for the reader. Our method also requires sticky elements to be the first or last child of their parent. I'm not sure of a good way around that one, and hasn't come up often in my experience.
+
+## Wrapping up
+
+I hope you learned something about the power of Svelte actions and modern CSS! If you enjoyed the article, let me know on [Twitter](https://twitter.com/geoffrich_).
 
 ## References
 
@@ -262,3 +383,4 @@ So what's happening here? In our sticky action, we set isStuck based on the visi
 - https://svelte.dev/docs#use_action
 - https://css-tricks.com/an-explanation-of-how-the-intersection-observer-watches/#finding-the-position
 - https://developers.google.com/web/updates/2017/09/sticky-headers
+- https://svelte.school/tutorials/introduction-to-actions
