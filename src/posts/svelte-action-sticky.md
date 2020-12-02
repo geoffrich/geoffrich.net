@@ -12,13 +12,9 @@ TODO:
 
 - GIF a11y
 - Check for inclusive language w/ 11ty plugin
-- link to Twitter thread
 - should I host my profile image on Twitter?
-- @11tyrocks/eleventy-plugin-social-images
-- SR testing
 - favicon fallback
 - sticky node in middle? should a sentinel be placed directly after a sticky node?
-- update to use event listeners
 - observer capitalization
 
 `position: sticky` is a CSS property that lets you "stick" an element to the top of the screen when it would normally be scrolled away. However, there is no native way to change the element's styling when it becomes stuck. In this article, I will show you how to detect and style a "stuck" element using an underused feature of the Svelte API: actions.
@@ -59,12 +55,12 @@ Writing our sticky functionality as an action lets us put all the imperative DOM
 
 ```js
 // sticky.js
-export default function sticky(node, {callback, stickToTop}) {
+export default function sticky(node, {stickToTop}) {
   // do stuff
 }
 ```
 
-For our use case, we want two parameters: a callback (executed when stickiness changes) and stickToTop (whether the node will be stuck to the top or bottom). We'll go into how we'll use these parameters later.
+We pass the parameter `stickToTop` into the action to indicate whether the node will be stuck to the top or bottom. We'll go into how this will be used later.
 
 One you have your action, you can attach it to a node with `use`.
 
@@ -77,7 +73,7 @@ One you have your action, you can attach it to a node with `use`.
 
 <h2
   class="sticky"
-  use:sticky={{ callback: stickyCallback, stickToTop: true }}>
+  use:sticky={{ stickToTop: true }}>
   I use position: sticky!
 </h2>
 ```
@@ -108,14 +104,18 @@ The classes aren't strictly necessary, but they make it clear why the divs are t
 
 We then initialize an Intersection Observer to observe either the top or bottom sentinel, depending on the `stickToTop` parameter passed to the action. The [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) allows us to execute a function when a certain node exits or enters the viewport. If the observer fires and the sentinel is outside of the viewport (i.e., not intersecting), then the element must be stuck (except for an edge case we'll cover later). If the sentinel is within the viewport, then the sticky element cannot be stuck.
 
-Either way, we execute `callback` with an argument that indicates whether the element is sticking. `callback` is provided by the component using the action and will update the component's state when the node becomes stuck.
+Either way, we dispatch a custom `stuck` event with a property that indicates whether the element is sticking. The component using the action can listen to this event and update its state accordingly.
 
 ```js
 const intersectionCallback = function(entries) {
   // only observing one item at a time
   const entry = entries[0];
   let isStuck = !entry.isIntersecting;
-  callback(isStuck);
+  node.dispatchEvent(
+    new CustomEvent('stuck', {
+      detail: {isStuck}
+    })
+  );
 };
 
 const intersectionObserver = new IntersectionObserver(intersectionCallback, {});
@@ -126,8 +126,6 @@ if (stickToTop) {
   intersectionObserver.observe(stickySentinelBottom);
 }
 ```
-
-A vanilla JS implementation might toggle a "stuck" class on the element instead of using a callback. Since Svelte automatically scopes styles, it would think rules using this class are unused since "stuck" would not be referenced in the component code itself. That's why we use a callback here instead.
 
 This is our basic implementation. It has some bugs, but it works well enough to start using it. We'll circle back to some edge cases and enhancements later in the post, but let's see how we can use this action in a Svelte component.
 
@@ -176,8 +174,9 @@ If you want to change something about the element or component when it's stickin
   import sticky from './sticky.js';
 
   let isSticking = false;
-  function stickyCallback(isStuck) {
-    isSticking = isStuck;
+
+  function handleStuck(e) {
+    isSticking = e.detail.isStuck;
   }
 </script>
 
@@ -188,7 +187,8 @@ If you want to change something about the element or component when it's stickin
 <section>
   <h2
     class="sticky"
-    use:sticky={{ callback: stickyCallback, stickToTop: true }}>
+    use:sticky={{ stickToTop: true }}
+    on:stuck={handleStuck}>
     I use position: sticky! (currently
     {isSticking ? 'sticking' : 'not sticking'})
   </h2>
@@ -201,11 +201,11 @@ If you want to change something about the element or component when it's stickin
 
 There's a bit more going on here, so let's break it down.
 
-Our script tag is pretty slim &mdash; we import our sticky action and define a state variable `isSticking` and a function `stickyCallback` to update that variable.
+Our script tag is pretty slim &mdash; we import our sticky action and define a state variable `isSticking` and a function `handleStuck` to update that variable when the event is fired.
 
-In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. When the `h2` is added to the DOM, the action will automatically set up the observers with the callback we provided. Executing the callback will update the state variable and we can dynamically show whether the element is sticking or not. Pretty neat!
+In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. We also set up an event listener to listen for our custom `stuck` event. When the `h2` is added to the DOM, the action will automatically set up the observers with the callback we provided. Executing the callback will dispatch the `stuck` event and we can dynamically show whether the element is sticking or not. Pretty neat!
 
-We can also update the styling of the element using that same state variable.
+We can also update the styling of the element using our `isSticking` state variable.
 
 {% raw %}
 
@@ -225,7 +225,8 @@ We can also update the styling of the element using that same state variable.
 <section>
   <h2
     class="sticky"
-    use:sticky={{ callback: stickyCallback, stickToTop: true }}
+    use:sticky={{ stickToTop: true }}
+    on:stuck={handleStuck}
     data-stuck={isSticking}>
     I use position: sticky! (currently
     {isSticking ? 'sticking' : 'not sticking'})
@@ -246,13 +247,17 @@ Looks great! Unfortunately, we have a bug when we have multiple sticky elements 
 
 So what's happening here? In our sticky action, we set `isStuck` based on the visibility of the top sentinel. When the page loads, the sentinel for the second heading is out of view, so the second heading applies the stuck styles. When we scroll down, the sentinel comes into view and the stuck styles are removed, resulting in a flash of the stuck styles.
 
-To fix this, we need to check the Y position before executing the callback. If the sentinel is coming into view from the bottom of the screen but we are observing an element sticking to the top, `isStuck` should be false. Similarly, if the sentinel is coming into view from the top of the screen but we are observing an element sticking to the bottom, `isStuck` should also be false. Here's what that looks like in code.
+To fix this, we need to check the Y position before dispatching the event. If the sentinel is coming into view from the bottom of the screen but we are observing an element sticking to the top, `isStuck` should be false. Similarly, if the sentinel is coming into view from the top of the screen but we are observing an element sticking to the bottom, `isStuck` should also be false. Here's what that looks like in code.
 
 ```js
 const intersectionCallback = function(entries) {
   const entry = entries[0];
   let isStuck = !entry.isIntersecting && isValidYPosition(entry);
-  callback(isStuck);
+  node.dispatchEvent(
+    new CustomEvent('stuck', {
+      detail: {isStuck}
+    })
+  );
 };
 
 const isValidYPosition = function({target, boundingClientRect}) {
@@ -277,9 +282,10 @@ For instance, let's say you had some content controlled by a checkbox that toggl
 ```svelte
 <section>
   <h2
-      class="sticky"
-      use:sticky={{ callback: stickyCallback, stickToTop: true }}>
-      I use position: sticky!
+    class="sticky"
+      use:sticky={{ stickToTop: true }}
+      on:stuck={handleStuck}>
+    I use position: sticky!
   </h2>
 
   <slot />
