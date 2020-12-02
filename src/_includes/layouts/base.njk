@@ -5,9 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}/feed.xml" />
-  <link rel="icon" href="{{ site.faviconPath }}" type="image/png" />
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
+  <link rel="alternate icon" href="/images/favicon.ico">
   {% include "partials/global/meta-info.njk" %}
-  <script>document.documentElement.classList.remove('no-js');</script>
+  <script>
+    document.documentElement.classList.remove('no-js'); 
+    localStorage.getItem('theme') && document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
+    localStorage.getItem('user-color-scheme') && document.documentElement.setAttribute('data-user-color-scheme', localStorage.getItem('user-color-scheme'));
+  </script>
   <style>{% include "assets/css/global.css" %}</style>
   {% block head %}
   {% endblock %}
@@ -19,7 +24,10 @@
   {% include "partials/global/site-foot.njk" %}
   {% block foot %}
   {% endblock %}
+  <script src="/node_modules/focus-visible/dist/focus-visible.min.js"></script>
   <script type="module" src="/js/components/theme-toggle.js" async defer></script>
+  <script type="module" src="/js/components/theme-picker.js" async defer></script>
+  <script type="module" src="/js/repl.js" async defer></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -27,6 +35,5 @@
       });
     }
   </script>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
 </body>
 </html>

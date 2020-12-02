@@ -6,8 +6,29 @@
         <span class="visually-hidden">{{ site.name }} - Home</span>
         <span class="[ site-head__site-name ] [ text-600 ]" aria-hidden="true">{{ site.name }}</span>
       </a>
-      {% set ariaLabel = 'navigation' %}
-      {% include "partials/components/nav.njk" %}
+      <div class="[ box-flex align-center ]">
+        {% set ariaLabel = 'navigation' %}
+        {% include "partials/components/nav.njk" %}
+        <button class="[ button theme-selector-toggle ] [ text-600 bg-primary ] " aria-expanded="false">
+          <span class="visually-hidden">Toggle theme selector</span>
+          {% include "icons/paint.svg" %}
+        </button>
+      </div>
+    </div>
+
+    <div class="theme-selector" data-state="closed">
+      <fieldset >
+        <legend>Theme color</legend>
+        {% for themeName, color in tokens.themes %}
+        <label for="theme-{{ themeName }}">
+          <input class="theme-selector__option" type="radio" {{ "checked" if (themeName == "default")}} name="theme" value="{{ themeName }}" id="theme-{{ themeName }}">
+            <span class="theme-selector__text" data-theme="{{ themeName }}">
+              {{ themeName }}
+            </span>
+          </label>
+        {% endfor %}
+      </fieldset>
+      <theme-toggle></theme-toggle>
     </div>
   </div>
 </header>

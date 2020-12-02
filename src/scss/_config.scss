@@ -14,6 +14,7 @@ $stalfos-size-scale: map-get($tokens, 'size-scale');
  * You can also use them to power borders, fills or shadows, for example.
  */
 $stalfos-colors: map-get($tokens, 'colors');
+$stalfos-themes: map-get($tokens, 'themes');
 
 /**
  * UTIL PREFIX
@@ -30,7 +31,8 @@ $stalfos-util-prefix: 'sf-';
 $metrics: (
   'wrap-max-width': 58rem,
   'wrap-inner-max-width': 52rem,
-  'md-breakpoint': 48rem
+  'md-breakpoint': 48rem,
+  'sm-breakpoint': 30rem
 );
 
 /**
@@ -171,7 +173,8 @@ $stalfos-config: (
     'property': 'width'
   ),
   'breakpoints': (
-    'md': #{'(min-width: ' + map-get($metrics, 'md-breakpoint') + ')'}
+    'md': #{'(min-width: ' + map-get($metrics, 'md-breakpoint') + ')'},
+    'sm': #{'(min-width: ' + map-get($metrics, 'sm-breakpoint') + ')'}
   ),
   'utilities': (
     'reset': 'on',

@@ -17,11 +17,7 @@
   filter: brightness(1.2);
 }
 
-.button:focus:hover {
-  outline: none;
-}
-
-.button:focus:not(:hover) {
+.button:focus {
   outline: 1px solid var(--color-action-text);
   outline-offset: -4px;
 }

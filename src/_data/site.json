@@ -1,7 +1,6 @@
 {
-  "showThemeCredit": true,
-  "name": "Geoff Rich's personal site",
-  "shortDesc": "I write code, play piano, and read too many books.",
+  "name": "Geoff Rich",
+  "shortDesc": "Front-end web development and related topics.",
   "url": "https://geoffrich.net",
   "authorEmail": "no@email",
   "authorHandle": "",

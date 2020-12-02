@@ -4,37 +4,46 @@
     #{'--color-' + nth($color, 1)}: #{nth($color, 2)};
   }
 
+  @each $color in $stalfos-themes {
+    #{'--color-theme-' + nth($color, 1)}: #{nth($color, 2)};
+  }
+
   // Set theme aliases
   --color-mode: 'light';
-  --color-bg: #{get-color('light')};
-  --color-bg-glare: #{get-color('light')};
-  --color-text: #{get-color('dark')};
-  --color-text-glare: #{get-color('dark')};
-  --color-selection-text: #{get-color('light')};
-  --color-selection-bg: #{get-color('dark')};
-  --color-stroke: #{get-color('mid')};
-  --color-action-bg: #{get-color('primary')};
-  --color-action-text: #{get-color('light')};
-  --color-theme-primary: #{get-color('primary')};
-  --color-theme-primary-glare: #{get-color('primary-glare')};
-  --color-theme-highlight: #{get-color('highlight')};
-  --color-theme-highlight-block: #{get-color('highlight')};
+  --color-bg: var(--color-light);
+  --color-bg-glare: var(--color-light);
+  --color-text: var(--color-dark);
+  --color-text-glare: var(--color-dark);
+  --color-selection-text: var(--color-light);
+  --color-selection-bg: var(--color-dark);
+  --color-stroke: var(--color-mid);
+  --color-action-bg: var(--color-primary);
+  --color-action-text: var(--color-light);
+  --color-theme-primary: var(--color-primary);
+  --color-theme-primary-glare: var(--color-primary-glare);
+  --color-theme-highlight: var(--color-highlight);
+  --color-theme-highlight-block: var(--color-theme-highlight);
 }
 
 @include dark-mode() {
-  --color-bg: #{get-color('dark')};
-  --color-bg-glare: #{get-color('slate')};
-  --color-text: #{get-color('light')};
-  --color-selection-text: #{get-color('dark')};
-  --color-selection-bg: #{get-color('light')};
-  --color-stroke: #{get-color('slate')};
+  --color-bg: var(--color-dark);
+  --color-bg-glare: var(--color-slate);
+  --color-text: var(--color-light);
+  --color-selection-text: var(--color-dark);
+  --color-selection-bg: var(--color-light);
+  --color-stroke: var(--color-slate);
   --color-theme-primary: #{lighten(get-color('primary'), 50%)};
   --color-theme-primary-glare: #{lighten(get-color('primary-glare'), 50%)};
   --color-action-bg: var(--color-theme-primary-glare);
-  --color-action-text: #{get-color('dark')};
-  --color-theme-highlight: #{get-color('highlight')};
-  --color-theme-highlight-block: #{get-color('slate')};
-  --color-theme-feature-text: #{get-color('highlight')};
+  --color-action-text: var(--color-dark);
+  --color-theme-highlight-block: var(--color-slate);
+  --color-theme-feature-text: var(--color-theme-highlight);
+}
+
+@each $color in $stalfos-themes {
+  :root[data-theme='#{nth($color, 1)}'] {
+    --color-theme-highlight: #{nth($color, 2)};
+  }
 }
 
 body {

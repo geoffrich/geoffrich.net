@@ -1,0 +1,55 @@
+.theme-selector {
+  @each $color in $stalfos-themes {
+    $theme-name: nth($color, 1);
+    &__text[data-theme='#{$theme-name}'] {
+      border-bottom: 3px solid var(--color-theme-#{$theme-name});
+    }
+  }
+
+  max-height: 300px;
+  transition: max-height 0.2s linear, visibility 0.2s linear;
+
+  &[data-state='closed'] {
+    visibility: hidden;
+    max-height: 0;
+  }
+}
+
+.theme-selector-toggle {
+  padding: 0.5rem;
+  border-radius: 50%;
+  margin-left: 1rem;
+  position: relative;
+  overflow: hidden;
+  height: 2.75rem;
+  width: 2.75rem;
+
+  &:focus {
+    outline-color: var(--color-theme-primary-glare);
+    outline-offset: 4px;
+  }
+
+  svg {
+    transform: translateX(1px) translateY(1px);
+  }
+
+  &:after {
+    // from http://jsfiddle.net/nqQc7/512/
+    animation: shine 5s ease-in-out 2s;
+    content: '';
+    position: absolute;
+    top: -110%;
+    left: -210%;
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+    transform: rotate(30deg);
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.13) 0%,
+      rgba(255, 255, 255, 0.13) 77%,
+      rgba(255, 255, 255, 0.5) 92%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+}

@@ -10,6 +10,7 @@
 
 // Local dependencies
 @import 'typography';
+@import 'animation';
 
 /**
  * GLOBAL STYLES
@@ -51,6 +52,14 @@ img {
   outline-offset: 0.25rem;
 }
 
+/*
+  This will hide the focus indicator if the element receives focus via the mouse,
+  but it will still show up on keyboard focus.
+*/
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
 /**
  * PROJECT IMPORTS
  */
@@ -62,6 +71,8 @@ img {
 
 // Components
 @import 'components/button';
+@import 'components/callout';
+@import 'components/clickable-gif';
 @import 'components/form';
 @import 'components/heading-permalink';
 @import 'components/intro';
@@ -74,3 +85,4 @@ img {
 @import 'components/skip-link';
 @import 'components/syntax-highlighting';
 @import 'components/video-player';
+@import 'components/theme-selector';

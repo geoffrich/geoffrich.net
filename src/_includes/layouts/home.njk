@@ -1,10 +1,10 @@
 {% extends 'layouts/base.njk' %}
 
 {# Intro content #}
-{% set introHeading = title %}
 {% set introSummary %}
   {{ content | safe }}
 {% endset %}
+{% set introImage = { src: "/images/profile.jpg", alt: "Geoff Rich" } %}
 
 {# Post list content #}
 {% set postListHeading = postsHeading %}

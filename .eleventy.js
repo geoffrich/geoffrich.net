@@ -1,5 +1,6 @@
 const rssPlugin = require('@11ty/eleventy-plugin-rss');
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
+require('prism-svelte');
 const fs = require('fs');
 
 // Import filters
@@ -35,7 +36,11 @@ module.exports = function(config) {
   config.addPassthroughCopy('src/admin/config.yml');
   config.addPassthroughCopy('src/admin/previews.js');
   config.addPassthroughCopy('node_modules/nunjucks/browser/nunjucks-slim.js');
+  config.addPassthroughCopy('node_modules/focus-visible/dist/focus-visible.min.js');
   config.addPassthroughCopy('src/robots.txt');
+
+  config.addWatchTarget('src/_includes/assets/css');
+  config.setUseGitIgnore(false);
 
   const now = new Date();
 
