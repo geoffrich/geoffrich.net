@@ -11,8 +11,6 @@ tags:
 TODO:
 
 - GIF a11y
-- Check for inclusive language w/ 11ty plugin
-- favicon fallback
 
 `position: sticky` is a CSS property that lets you "stick" an element to the top of the screen when it would normally be scrolled away. However, there is no native way to change the element's styling when it becomes stuck. In this article, I will show you how to detect and style a "stuck" element using an underused feature of the Svelte API: actions.
 
@@ -87,7 +85,7 @@ Here's a gif of the sentinel in action. For the purposes of this demo, I've give
 
 ![Demonstration of applied sticky styling when the top sentinel travels off-screen](/images/svelte-action-sticky/sentinel.gif)
 
-First, let's create and insert our sentinel divs inside our `sticky` function.
+To accomplish this, let's first create and insert our sentinel divs inside our `sticky` function.
 
 ```js
 const stickySentinelTop = document.createElement('div');
