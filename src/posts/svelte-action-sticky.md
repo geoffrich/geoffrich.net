@@ -8,10 +8,6 @@ tags:
   - js
 ---
 
-TODO:
-
-- GIF a11y
-
 `position: sticky` is a CSS property that lets you "stick" an element to the top of the screen when it would normally be scrolled away. However, there is no native way to change the element's styling when it becomes stuck. In this article, I will show you how to detect and style a "stuck" element using an underused feature of the Svelte API: actions.
 
 If you want to see the end result and don't want to read the explanation, here's my [finished demo](https://svelte.dev/repl/4ad71e00c86c47d29806e17f09ff0869?version=3) in the Svelte REPL. You can also find the code on my [GitHub](https://github.com/geoffrich/svelte-sticky-demo).
@@ -238,11 +234,11 @@ We can also update the styling of the element using our `isSticking` state varia
 Since we can't reference JavaScript variables in our styles directly, we need to update an attribute on the element so we have something to target in our CSS.
 Here we set the `data-stuck` attribute to the value of `isSticking`. Using data attributes for state changes comes from [the CUBE CSS methodology](https://piccalil.li/cube-css/exception/). You could set a class using the `class:` directive here instead, depending on personal preference. Either way, you have something to target in your CSS. Now when the element is stuck, the color changes to mintcream 🍦.
 
-Looks great! Unfortunately, we have a bug when we have multiple sticky elements on the page. Depending on your CSS, when scrolling down you may see a brief flash of the "stuck" styles on the heading coming into view. I changed the sticky colors to black and white and set a transition duration of 2 seconds to make it very clear. See the GIF below.
+Looks great! Unfortunately, we have a bug when we have multiple sticky elements on the page. Depending on your CSS, when scrolling down you may see a brief flash of the "stuck" styles on the heading coming into view. I changed the sticky colors to black and white and increased the transition duration to make it very clear. See the gif below.
 
 ![Sticky styles briefly applied when scrolling down](/images/svelte-action-sticky/sticky-css-bug.gif)
 
-So what's happening here? In our sticky action, we set `isStuck` based on the visibility of the top sentinel. When the page loads, the sentinel for the second heading is out of view, so the second heading applies the stuck styles. When we scroll down, the sentinel comes into view and the stuck styles are removed, resulting in a flash of the stuck styles.
+What's happening here? In our sticky action, we set `isStuck` based on the visibility of the top sentinel. When the page loads, the sentinel for the second heading is out of view, so the second heading applies the stuck styles. When we scroll down, the sentinel comes into view and the stuck styles are removed, resulting in a flash of the stuck styles as the styles transition.
 
 To fix this, we need to check the Y position before dispatching the event. If the sentinel is coming into view from the bottom of the screen but we are observing an element sticking to the top, `isStuck` should be false. Similarly, if the sentinel is coming into view from the top of the screen but we are observing an element sticking to the bottom, `isStuck` should also be false. Here's what that looks like in code.
 
@@ -270,7 +266,7 @@ With that change, sticky styling is applied correctly.
 
 ## Another edge case: mutations
 
-I encountered another edge case while preparing the demo for this post &mdash; what happens if the content inside the component moves around? It's important that our sentinel nodes are at the top and bottom of the node's parent, but that is not guaranteed if Svelte is dynamically inserting elements after the action has run.
+I encountered another edge case while preparing the demo for this post &mdash; what happens if the content inside the component moves around? It's important that our sentinel nodes are at the top and bottom of the node's parent, but that is not guaranteed if Svelte dynamically inserts elements after the action has run.
 
 For instance, let's say you had some content controlled by a checkbox that toggles `flag`.
 
@@ -294,7 +290,7 @@ For instance, let's say you had some content controlled by a checkbox that toggl
 
 {% endraw %}
 
-I found that toggling the value of `flag` would re-insert the node after the bottom sentinel, which could introduce bugs since we expect the bottom sentinel to be the last element in its container. See the below HTML for the result.
+I found that toggling the value of `flag` would re-insert the node after the bottom sentinel, which could introduce bugs since we expect the bottom sentinel to be the last element in its container. The rendered HTML would look like the following.
 
 ```html
 <div class="stickySentinelTop"></div>
@@ -364,7 +360,7 @@ return {
 
 ## Some caveats
 
-There's a few caveats to this implementation. Adding raw DOM nodes like this could break certain CSS selectors like `:first-child`. There's an alternative approach using the `rootMargin` property of the observer, but this does not let you set any sort of offset position for the sticky element (e.g. `top: 1rem`). You can read more about it at [CSS Tricks](https://css-tricks.com/an-explanation-of-how-the-intersection-observer-watches/#creating-a-position-sticky-event). If you don't need to offset the sticky element, using `rootMargin` may be a better option.
+There's a few caveats to this implementation. Adding raw DOM nodes like this could break certain CSS selectors like `:first-child`. There's an alternative approach using the `rootMargin` property of the observer, but this does not let you set any sort of offset position for the sticky element (e.g. `top: 1rem`). If you don't need to offset the sticky element, using `rootMargin` may be a better option. You can read more about it at [CSS Tricks](https://css-tricks.com/an-explanation-of-how-the-intersection-observer-watches/#creating-a-position-sticky-event).
 
 We also didn't implement anything for horizontal stickiness. I'll leave that as an exercise for the reader. Our method also requires sticky elements to be the first or last child of their parent. I haven't experimented with how this method handles sticky elements in the middle of a container, and there could be more edge cases.
 

@@ -21,6 +21,8 @@
   margin-left: 1rem;
   position: relative;
   overflow: hidden;
+  height: 2.75rem;
+  width: 2.75rem;
 
   &:focus {
     outline-color: var(--color-theme-primary-glare);

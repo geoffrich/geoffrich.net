@@ -30,6 +30,30 @@ module.exports = function(value, outputPath) {
           image.setAttribute('height', dimensions.height);
         }
 
+        // Make gifs play/pause on click
+        // https://christianheilmann.com/2020/07/16/a-css-only-click-to-animate-gif-solution/
+        if (file.indexOf('.gif') >= 0) {
+          const label = document.createElement('label');
+          label.classList.add('click-to-gif');
+          label.title = 'click/hit space to show gif';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.setAttribute('checked', 'true');
+          checkbox.classList.add('visually-hidden');
+
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svg.innerHTML = `<path d="M1288.678 637.83q0 37-33 56l-512 288q-14 8-31 8t-32-9q-32-18-32-55v-576q0-37 32-55 31-20 63-1l512 288q33 19 33 56zm128 0q0-104-40.5-198.5t-109.5-163.5q-69-69-163.5-109.5t-198.5-40.5q-104 0-198.5 40.5t-163.5 109.5q-69 69-109.5 163.5t-40.5 198.5q0 104 40.5 198.5t109.5 163.5q69 69 163.5 109.5t198.5 40.5q104 0 198.5-40.5t163.5-109.5q69-69 109.5-163.5t40.5-198.5zm256 0q0 209-103 385.5t-279.5 279.5q-176.5 103-385.5 103t-385.5-103q-176.5-103-279.5-279.5t-103-385.5q0-209 103-385.5t279.5-279.5q176.5-103 385.5-103t385.5 103q176.5 103 279.5 279.5t103 385.5z" fill="var(--svg-fill)"/>`;
+          svg.setAttribute('viewBox', '0 -256 1792 1792');
+          svg.setAttribute('aria-hidden', 'true');
+
+          label.appendChild(checkbox);
+          label.appendChild(svg);
+          label.appendChild(image.cloneNode(true));
+
+          image.replaceWith(label);
+        }
+
         // If an image has a title it means that the user added a caption
         // so replace the image with a figure containing that image and a caption
         if (image.hasAttribute('title')) {

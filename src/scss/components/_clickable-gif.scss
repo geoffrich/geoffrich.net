@@ -1,0 +1,30 @@
+// Adapted from https://christianheilmann.com/2020/07/16/a-css-only-click-to-animate-gif-solution/
+
+.click-to-gif {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  background: var(--color-primary);
+  --svg-fill: var(--color-mid);
+
+  &:focus-within {
+    outline: 1px solid var(--color-theme-primary-glare);
+    outline-offset: 0.25rem;
+  }
+
+  svg {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    height: 100%;
+  }
+
+  img {
+    display: block;
+  }
+
+  input[type='checkbox']:checked ~ img,
+  input[type='checkbox']:not(:checked) ~ svg {
+    opacity: 0;
+  }
+}

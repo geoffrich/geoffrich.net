@@ -18,7 +18,7 @@
       @include apply-utility('leading', 'tight');
     }
 
-    a:not([class]) {
+    a:not(.heading-permalink) {
       color: var(--color-dark);
       position: relative;
       display: inline-block;
@@ -30,7 +30,7 @@
       @include apply-utility('leading', 'tight');
     }
 
-    a:not([class]):hover {
+    a:not(.heading-permalink):hover {
       text-decoration: underline;
     }
 
