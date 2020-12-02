@@ -20,7 +20,7 @@ In essence, sticky positioning lets you stick an element on screen once a certai
 
 A common use case is to keep some information in view that would normally be scrolled off screen. For instance, if someone is changing their flight online, you may want to stick their current flight information to the top of the screen as they scroll through other flight options. Here are some other examples of [position: sticky in practice](https://mastery.games/post/position-sticky/).
 
-Sticky positioning is supported in the vast majority of browsers ([Can I Use](https://caniuse.com/?search=position%20sticky)). Even if a browser doesn't support it, it can be treated as a progressive enhancement and gracefully fallback to regular positioning.
+Sticky positioning is supported in the vast majority of browsers ([Can I Use](https://caniuse.com/?search=position%20sticky)). Even if a browser doesn't support it, it can be treated as a progressive enhancement and gracefully fall back to static positioning.
 
 ## How do I change the appearance of an element when it becomes stuck?
 
@@ -84,16 +84,19 @@ Here's a gif of the sentinel in action. For the purposes of this demo, I've give
 To accomplish this, let's first create and insert our sentinel divs inside our `sticky` function.
 
 ```js
+const sentinelStyle = 'position: absolute; height: 1px;';
 const stickySentinelTop = document.createElement('div');
 stickySentinelTop.classList.add('stickySentinelTop');
+stickySentinelTop.style = sentinelStyle;
 node.parentNode.prepend(stickySentinelTop);
 
 const stickySentinelBottom = document.createElement('div');
 stickySentinelBottom.classList.add('stickySentinelBottom');
+stickySentinelBottom.style = sentinelStyle;
 node.parentNode.append(stickySentinelBottom);
 ```
 
-The classes aren't strictly necessary, but they make it clear why the divs are there if you saw them in the dev tools inspector.
+The classes aren't strictly necessary, but they make it clear why the divs are there if you saw them in the dev tools inspector. We also give the sentinels a height &mdash; for whatever reason, the demo was not working properly in Safari if I did not set a height. We set `position: absolute` so that the sentinels do not take up space in the document.
 
 We then initialize an intersection observer to observe either the top or bottom sentinel, depending on the `stickToTop` parameter passed to the action. The [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) allows us to execute a function when a certain node exits or enters the viewport. If the observer fires and the sentinel is outside of the viewport (i.e., not intersecting), then the element must be stuck (except for an edge case we'll cover later). If the sentinel is within the viewport, then the sticky element cannot be stuck.
 
@@ -196,7 +199,7 @@ There's a bit more going on here, so let's break it down.
 
 Our script tag is pretty slim &mdash; we import our sticky action and define a state variable `isStuck` and a function `handleStuck` to update that variable when the event is fired.
 
-In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. We also set up an event listener to listen for our custom `stuck` event. When the `h2` is added to the DOM, the action will automatically set up the observers with the callback we provided. Executing the callback will dispatch the `stuck` event and we can dynamically show whether the element is sticking or not. Pretty neat!
+In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. We also set up an event listener to listen for our custom `stuck` event. When the `h2` is added to the DOM, the action will initialize the observers with the callback we provided. Executing the callback will dispatch the `stuck` event and we can dynamically show whether the element is sticking or not. Pretty neat!
 
 We can also update the styling of the element using our `isStuck` state variable.
 
@@ -371,7 +374,7 @@ I hope you learned something about the power of Svelte actions and modern CSS! I
 
 - [MDN docs on sticky positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning)
 - [Documentation on Svelte actions](https://svelte.dev/docs#use_action)
-- [Svelte School: Introduction to Actions](https://svelte.school/tutorials/introduction-to-actions)
-- [Kirill Vasiltsov: Unlocking the power of Svelte actions](https://dev.to/virtualkirill/unlocking-the-power-of-svelte-actions-1k29)
-- [Google Developers Blog: An event for CSS position:sticky](https://developers.google.com/web/updates/2017/09/sticky-headers) &mdash; this inspired a lot of my approach for this post.
-- [CSS Tricks on an alternative approach](https://css-tricks.com/an-explanation-of-how-the-intersection-observer-watches/#finding-the-position)
+- [Introduction to Actions](https://svelte.school/tutorials/introduction-to-actions) (Svelte School)
+- [Unlocking the power of Svelte actions](https://dev.to/virtualkirill/unlocking-the-power-of-svelte-actions-1k29) (Kirill Vasiltsov)
+- [An event for CSS position:sticky](https://developers.google.com/web/updates/2017/09/sticky-headers) (Google Developers Blog) &mdash; this inspired a lot of my approach for this post.
+- [CSS Tricks](https://css-tricks.com/an-explanation-of-how-the-intersection-observer-watches/#finding-the-position) on an alternative approach
