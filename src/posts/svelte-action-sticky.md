@@ -1,6 +1,6 @@
 ---
 title: Detecting sticky positioning with Svelte actions
-date: '2020-11-24'
+date: '2020-12-02'
 tags:
   - svelte
   - html
@@ -166,10 +166,10 @@ If you want to change something about the element or component when it's stickin
 <script>
   import sticky from './sticky.js';
 
-  let isSticking = false;
+  let isStuck = false;
 
   function handleStuck(e) {
-    isSticking = e.detail.isStuck;
+    isStuck = e.detail.isStuck;
   }
 </script>
 
@@ -183,7 +183,7 @@ If you want to change something about the element or component when it's stickin
     use:sticky={{ stickToTop: true }}
     on:stuck={handleStuck}>
     I use position: sticky! (currently
-    {isSticking ? 'sticking' : 'not sticking'})
+    {isStuck ? 'sticking' : 'not sticking'})
   </h2>
 
   <!-- Lorem ipsum text truncated for readability -->
@@ -194,11 +194,11 @@ If you want to change something about the element or component when it's stickin
 
 There's a bit more going on here, so let's break it down.
 
-Our script tag is pretty slim &mdash; we import our sticky action and define a state variable `isSticking` and a function `handleStuck` to update that variable when the event is fired.
+Our script tag is pretty slim &mdash; we import our sticky action and define a state variable `isStuck` and a function `handleStuck` to update that variable when the event is fired.
 
 In our markup, we use the action we created earlier with `use:sticky` and pass in the action parameters. We also set up an event listener to listen for our custom `stuck` event. When the `h2` is added to the DOM, the action will automatically set up the observers with the callback we provided. Executing the callback will dispatch the `stuck` event and we can dynamically show whether the element is sticking or not. Pretty neat!
 
-We can also update the styling of the element using our `isSticking` state variable.
+We can also update the styling of the element using our `isStuck` state variable.
 
 {% raw %}
 
@@ -210,7 +210,7 @@ We can also update the styling of the element using our `isSticking` state varia
 <style>
   .sticky { /* No change */ }
 
-  .sticky[data-stuck="true"] {
+  .sticky.isStuck {
     background: mintcream;
   }
 </style>
@@ -218,11 +218,11 @@ We can also update the styling of the element using our `isSticking` state varia
 <section>
   <h2
     class="sticky"
+    class:isStuck
     use:sticky={{ stickToTop: true }}
-    on:stuck={handleStuck}
-    data-stuck={isSticking}>
+    on:stuck={handleStuck}>
     I use position: sticky! (currently
-    {isSticking ? 'sticking' : 'not sticking'})
+    {isStuck ? 'sticking' : 'not sticking'})
   </h2>
 
   <!-- Lorem ipsum text truncated for readability -->
@@ -231,10 +231,9 @@ We can also update the styling of the element using our `isSticking` state varia
 
 {% endraw %}
 
-Since we can't reference JavaScript variables in our styles directly, we need to update an attribute on the element so we have something to target in our CSS.
-Here we set the `data-stuck` attribute to the value of `isSticking`. Using data attributes for state changes comes from [the CUBE CSS methodology](https://piccalil.li/cube-css/exception/). You could set a class using the `class:` directive here instead, depending on personal preference. Either way, you have something to target in your CSS. Now when the element is stuck, the color changes to mintcream 🍦.
+Since we can't reference JavaScript variables in our styles directly, we need to add a class to the element so we have something to target in our CSS. We add the isStuck class using the Svelte `class:` directive. Now when the element is stuck, the color changes to mintcream 🍦.
 
-Looks great! Unfortunately, we have a bug when we have multiple sticky elements on the page. Depending on your CSS, when scrolling down you may see a brief flash of the "stuck" styles on the heading coming into view. I changed the sticky colors to black and white and increased the transition duration to make it very clear. See the gif below.
+Looks great! Unfortunately, we have a bug when we have multiple sticky elements on the page. Depending on your CSS, when scrolling down you may see a brief flash of the "stuck" styles on the heading coming into view. I changed the sticky colors to black and white and increased the transition duration to make the problem clear. See the gif below.
 
 ![Sticky styles briefly applied when scrolling down](/images/svelte-action-sticky/sticky-css-bug.gif)
 
@@ -294,7 +293,7 @@ I found that toggling the value of `flag` would re-insert the node after the bot
 
 ```html
 <div class="stickySentinelTop"></div>
-<h2 class="sticky svelte-1n1qj7a" data-stuck="false"></h2>
+<h2 class="sticky svelte-1n1qj7a"></h2>
 <div class="stickySentinelBottom"></div>
 <p>Me too</p>
 ```
