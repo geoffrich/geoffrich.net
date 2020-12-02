@@ -12,10 +12,7 @@ TODO:
 
 - GIF a11y
 - Check for inclusive language w/ 11ty plugin
-- should I host my profile image on Twitter?
 - favicon fallback
-- sticky node in middle? should a sentinel be placed directly after a sticky node?
-- observer capitalization
 
 `position: sticky` is a CSS property that lets you "stick" an element to the top of the screen when it would normally be scrolled away. However, there is no native way to change the element's styling when it becomes stuck. In this article, I will show you how to detect and style a "stuck" element using an underused feature of the Svelte API: actions.
 
@@ -86,7 +83,9 @@ When the `h2` appears in the DOM, the `sticky` function will run and we'll be of
 
 The way we'll detecting our node becoming stuck is with two "sentinel" divs: one at the top of the node's parent and one at the bottom. If the top sentinel exits the viewport, then a top position: sticky element is currently stuck. If the bottom sentinel exits the viewport, then a bottom position: sticky element is currently stuck.
 
-TODO: VISUAL EXAMPLE HERE
+Here's a gif of the sentinel in action. For the purposes of this demo, I've given the sentinel a height and colored it blue. See how the heading style changes once the sentinel travels off-screen.
+
+![Demonstration of applied sticky styling when the top sentinel travels off-screen](/images/svelte-action-sticky/sentinel.gif)
 
 First, let's create and insert our sentinel divs inside our `sticky` function.
 
@@ -102,7 +101,7 @@ node.parentNode.append(stickySentinelBottom);
 
 The classes aren't strictly necessary, but they make it clear why the divs are there if you saw them in the dev tools inspector.
 
-We then initialize an Intersection Observer to observe either the top or bottom sentinel, depending on the `stickToTop` parameter passed to the action. The [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) allows us to execute a function when a certain node exits or enters the viewport. If the observer fires and the sentinel is outside of the viewport (i.e., not intersecting), then the element must be stuck (except for an edge case we'll cover later). If the sentinel is within the viewport, then the sticky element cannot be stuck.
+We then initialize an intersection observer to observe either the top or bottom sentinel, depending on the `stickToTop` parameter passed to the action. The [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) allows us to execute a function when a certain node exits or enters the viewport. If the observer fires and the sentinel is outside of the viewport (i.e., not intersecting), then the element must be stuck (except for an edge case we'll cover later). If the sentinel is within the viewport, then the sticky element cannot be stuck.
 
 Either way, we dispatch a custom `stuck` event with a property that indicates whether the element is sticking. The component using the action can listen to this event and update its state accordingly.
 
@@ -306,7 +305,7 @@ I found that toggling the value of `flag` would re-insert the node after the bot
 <p>Me too</p>
 ```
 
-You might not encounter this edge case. In case you do, let's show how we can re-insert the sentinels on changes to the container using a [Mutation Observer](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
+You might not encounter this edge case. In case you do, let's show how we can re-insert the sentinels on changes to the container using a [mutation observer](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
 
 ## Replacing sentinels on mutations
 
@@ -330,7 +329,7 @@ const mutationCallback = function(mutations) {
 
 We don't have to worry about removing the sentinels before re-inserting them, since `prepend` and `append` will move them to the new location instead of duplicating the node.
 
-Now that we have our callback, we can initialize the Mutation Observer and observe our node's parent. We pass an options object to the `observe` call to indicate that we only care about updates to the list of children.
+Now that we have our callback, we can initialize the mutation observer and observe our node's parent. We pass an options object to the `observe` call to indicate that we only care about updates to the list of children.
 
 ```js
 const mutationObserver = new MutationObserver(mutationCallback);
@@ -369,7 +368,7 @@ return {
 
 There's a few caveats to this implementation. Adding raw DOM nodes like this could break certain CSS selectors like `:first-child`. There's an alternative approach using the `rootMargin` property of the observer, but this does not let you set any sort of offset position for the sticky element (e.g. `top: 1rem`). You can read more about it at [CSS Tricks](https://css-tricks.com/an-explanation-of-how-the-intersection-observer-watches/#creating-a-position-sticky-event). If you don't need to offset the sticky element, using `rootMargin` may be a better option.
 
-We also didn't implement anything for horizontal stickiness. I'll leave that as an exercise for the reader. Our method also requires sticky elements to be the first or last child of their parent. I'm not sure of a good way around that one, and it hasn't come up often in my experience.
+We also didn't implement anything for horizontal stickiness. I'll leave that as an exercise for the reader. Our method also requires sticky elements to be the first or last child of their parent. I haven't experimented with how this method handles sticky elements in the middle of a container, and there could be more edge cases.
 
 ## Wrapping up
 
