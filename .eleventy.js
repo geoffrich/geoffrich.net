@@ -2,6 +2,7 @@ const rssPlugin = require('@11ty/eleventy-plugin-rss');
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 require('prism-svelte');
 const fs = require('fs');
+const embedSvelte = require('eleventy-plugin-embed-svelte').default;
 
 // Import filters
 const dateFilter = require('./src/filters/date-filter.js');
@@ -61,6 +62,9 @@ module.exports = function(config) {
   // Plugins
   config.addPlugin(rssPlugin);
   config.addPlugin(syntaxHighlight);
+  config.addPlugin(embedSvelte, {
+    svelteDir: './src/svelte'
+  });
 
   // 404
   config.setBrowserSyncConfig({
