@@ -17,6 +17,7 @@ Relevant links
 - my REPL: https://svelte.dev/repl/bcccd7a1f43e41a4b824d6f50efe33a6?version=3.29.7
 - lihautan's REPL: https://svelte.dev/repl/33d343911c534f3b973efe5690522feb?version=3.29.7
 - My reddit post: https://www.reddit.com/r/sveltejs/comments/jzlkki/i_implemented_a_boop_hover_animation_using_svelte/
+- Chris Coyier pure CSS pen https://codepen.io/chriscoyier/pen/PoGbvmV
 
 When Josh Comeau posted a [React tutorial](https://www.joshwcomeau.com/react/boop/) on achieving a springy 'boop' animation when an icon is hovered, I was instantly intrigued. _A whimsical twist on hover transitions?_ Sign me up! There was just one problem.
 
@@ -24,36 +25,77 @@ I don't use React 😨
 
 My current framework of choice is Svelte, but this tutorial wasn't written for Svelte. Does that mean I can't learn anything from it?
 
-Of course not! Despite the framework, it's just JavaScript at the end of the day. In this post, I'll describe how I ported this React animation to Svelte. I recommend checking out Josh's tutorial for a more in-depth explanation of the effect, as this post will be focused on translating one framework to another.
+Of course not! Despite the framework, it's just JavaScript and CSS at the end of the day. In this post, I'll describe how I ported this React animation to Svelte. I recommend checking out Josh's tutorial for a more in-depth explanation of the effect, as this post will be focused on translating one framework to another.
 
-TODO: compile to web component and render?
+If you're viewing this on [my personal site](https://geoffrich.net), you can see an example of the Svelte component in action below. The animation triggers on both hover and click, to make the demo accessible for keyboard and mobile users.
 
-![A mouse hovering over three icons. The first rotates from side to side, the second scales up and down, and the third bounces up and down.](/images/boop/boop.gif)
+{% embedSvelte 'boop/BoopDemo.svelte' %}
 
-I translated the Josh's React hook to a Svelte action named `boop`. If you're not familiar with actions, you can read more about them in the official [Svelte tutorial](https://svelte.dev/tutorial/actions). Our new action can be used like so.
+Here's what Josh's React hook looks like.
+
+```js
+import React from 'react';
+import {useSpring} from 'react-spring';
+import usePrefersReducedMotion from '@hooks/use-prefers-reduced-motion.hook';
+function useBoop({
+  x = 0,
+  y = 0,
+  rotation = 0,
+  scale = 1,
+  timing = 150,
+  springConfig = {
+    tension: 300,
+    friction: 10
+  }
+}) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const [isBooped, setIsBooped] = React.useState(false);
+  const style = useSpring({
+    transform: isBooped
+      ? `translate(${x}px, ${y}px)
+         rotate(${rotation}deg)
+         scale(${scale})`
+      : `translate(0px, 0px)
+         rotate(0deg)
+         scale(1)`,
+    config: springConfig
+  });
+  React.useEffect(() => {
+    if (!isBooped) {
+      return;
+    }
+    const timeoutId = window.setTimeout(() => {
+      setIsBooped(false);
+    }, timing);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [isBooped]);
+  const trigger = React.useCallback(() => {
+    setIsBooped(true);
+  }, []);
+  let appliedStyle = prefersReducedMotion ? {} : style;
+  return [appliedStyle, trigger];
+}
+export default useBoop;
+```
+
+I translated Josh's React hook to a Svelte action named `boop`. If you're not familiar with actions, you can read more about them in the official [Svelte tutorial](https://svelte.dev/tutorial/actions). Our new action can be used like so.
 
 {% raw %}
 
 ```svelte
 <script>
-	import boop from './boop.js';
-	let isBooped = false;
-
-	function setIsBooped(val) {
-		isBooped = val;
-	}
-
-	function triggerBoop() {
-		isBooped = true;
-	}
+  import boop from "./boop.js";
+  export let boopParams = { y: 5 };
 </script>
 
-<span
-  on:mouseenter={triggerBoop}
-  use:boop={{isBooped, y: 5, timing: 200, setter: setIsBooped}}>
-	<slot/>
+<span use:boop={{ ...boopParams }}>
+  <slot />
 </span>
 ```
+
+{% endraw %}
 
 The `boop` function will run when the node is mounted and set up everything needed to run the animation.
 
@@ -63,40 +105,79 @@ Here's what the Svelte implementation ends up looking like. We put the transitio
 
 ```js
 import {spring} from 'svelte/motion';
+import {getPrefersReducedMotion} from './util';
 
-export default function boop(node, params) {
-  let {setter} = params;
-  let springyRotation = spring(
+export default function boop(
+  node,
+  {x = 0, y = 0, rotation = 0, scale = 1, timing = 150, boopElement}
+) {
+  if (getPrefersReducedMotion()) return;
+
+  node.addEventListener('mouseenter', handleMouseEnter);
+  // only for demo purposes on mobile
+  node.addEventListener('click', handleMouseEnter);
+
+  let timeoutId;
+  const springyRotation = spring(
     {x: 0, y: 0, rotation: 0, scale: 1},
     {
       stiffness: 0.1,
       damping: 0.15
     }
   );
-  let prefersReducedMotion = getPrefersReducedMotion();
 
-  node.style = `display: inline-block`;
+  const unsubscribe = springyRotation.subscribe(transformElement);
 
-  springyRotation.subscribe(({x, y, rotation, scale}) => {
-    node.style.transform =
-      !prefersReducedMotion &&
-      `translate(${x}px, ${y}px) rotate(${rotation}deg) scale(${scale})`;
-  });
+  function handleMouseEnter() {
+    clearTimeout(timeoutId);
+    springyRotation.set({x, y, rotation, scale});
+
+    timeoutId = setTimeout(() => {
+      springyRotation.set({x: 0, y: 0, rotation: 0, scale: 1});
+    }, timing);
+  }
+
+  function transformElement({x, y, rotation, scale}) {
+    const element = boopElement || node;
+    element.style.display = 'inline-block';
+    element.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg) scale(${scale})`;
+  }
 
   return {
-    update({isBooped, x = 0, y = 0, rotation = 0, scale = 1, timing}) {
-      springyRotation.set(
-        isBooped ? {x, y, rotation, scale} : {x: 0, y: 0, rotation: 0, scale: 1}
-      );
-
-      if (isBooped) {
-        window.setTimeout(() => setter(false), timing);
-      }
+    update(params) {
+      ({x = 0, y = 0, rotation = 0, scale = 1, timing = 150, boopElement} = params);
+    },
+    destroy() {
+      clearTimeout(timeoutId);
+      node.removeEventListener('mouseenter', handleMouseEnter);
+      node.removeEventListener('click', handleMouseEnter);
+      unsubscribe();
     }
   };
 }
 ```
 
-{% endraw %}
+## React hooks can return things, Svelte actions can't
 
-The only part of my solution I didn't like was handling state. The action needs to automatically reset `isBooped` after 200ms, but `isBooped` is controlled at the component level. To allow resetting state, I had the component pass a function to the action that resets `isBooped`. I posted this on Twitter, and Tan Li Hau was nice enough to show me a more idiomatic solution. He also reminded me to clean up the subscription in the actions `destroy` function.
+- This meant we had to handle state and apply styles within the action itself (separation of concerns?)
+- Handling boop state -- React version composes 3 hooks (set up state with useState, react to state change with useEffect, and trigger a state change with useCallback).
+- Svelte cuts out the middleman, but there's less flexibility
+- React version lets you call trigger however you want. Svelte version only boops on mouse enter
+- You could pass array of DOM event listeners, but what about non-DOM events?
+
+## Spring physics are an external library in React, but internal in Svelte
+
+- react-spring vs svelte/motion
+- you can't spring a string in Svelte, so you have to convert numbers to transform strings
+
+## A Svelte action operates on Raw DOM nodes, React hooks can be more abstract
+
+- Not bad, just different
+- More imperative
+- We have to handle cleanup/updates in Svelte version
+
+## Why can't we just use CSS animations/Svelte's built-in transitions/animations?
+
+- You can approximate spring physics with CSS animations, but not replicate them
+- See Chris Coyier's pen
+  https://github.com/IanLunn/Hover/blob/master/css/hover.css
