@@ -9,6 +9,7 @@ tags:
   - css:animation
   - js
   - react
+draft: true
 ---
 
 Relevant links
@@ -27,7 +28,7 @@ My current framework of choice is Svelte, but this tutorial wasn't written for S
 
 Of course not! Despite the framework, it's just JavaScript and CSS at the end of the day. In this post, I'll describe how I ported this React animation to Svelte. I recommend checking out Josh's tutorial for a more in-depth explanation of the effect, as this post will be focused on translating one framework to another.
 
-If you're viewing this on [my personal site](https://geoffrich.net), you can see an example of the Svelte component in action below. The animation triggers on both hover and click, to make the demo accessible for keyboard and mobile users.
+If you're viewing this on [my personal site](https://geoffrich.net), you can see an example of the Svelte component in action below. The animation triggers on both hover and click, to make the demo accessible for keyboard and mobile users. Shout out to [eleventy-plugin-embed-svelte](https://github.com/shalomscott/eleventy-plugin-embed-svelte) for making this super painless.
 
 {% embedSvelte 'boop/BoopDemo.svelte' %}
 
