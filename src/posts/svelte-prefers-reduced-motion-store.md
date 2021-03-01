@@ -5,6 +5,7 @@ tags:
   - svelte
   - svelte:store
   - a11y
+socialImage: 'https://geoffrich.net/images/social/svelte-reduced-motion.png'
 ---
 
 The [prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) media query is used to detect if the user has requested that animation and motion be minimized. Website animation may trigger motion sickness for those with vestibular disorders, and it is important to disable non-essential animations for these users. prefers-reduced-motion is often used in a CSS stylesheet to disable certain animations, though it can also be used to modify animations applied with JavaScript.
