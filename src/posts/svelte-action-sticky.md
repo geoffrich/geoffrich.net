@@ -8,6 +8,7 @@ tags:
   - css
   - css:position
   - js
+socialImage: 'https://geoffrich.net/images/social/svelte-action-sticky.png'
 ---
 
 `position: sticky` is a CSS property that lets you "stick" an element to the top of the screen when it would normally be scrolled away. However, there is no native way to change the element's styling when it becomes stuck. In this article, I will show you how to detect and style a "stuck" element using an underused feature of the Svelte API: actions.
