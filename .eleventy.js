@@ -48,6 +48,10 @@ module.exports = function(config) {
   // Custom collections
   const livePosts = post => post.date <= now && !post.data.draft;
   config.addCollection('posts', collection => {
+    return [...collection.getFilteredByGlob('./src/posts/*.md').filter(livePosts)];
+  });
+
+  config.addCollection('postsReverse', collection => {
     return [
       ...collection.getFilteredByGlob('./src/posts/*.md').filter(livePosts)
     ].reverse();
