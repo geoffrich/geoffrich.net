@@ -5,6 +5,7 @@ tags:
   - svelte
   - svelte:store
   - a11y
+  - js
 socialImage: 'https://geoffrich.net/images/social/svelte-reduced-motion.png'
 ---
 
