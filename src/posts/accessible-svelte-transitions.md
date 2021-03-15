@@ -6,6 +6,7 @@ tags:
   - svelte:transition
   - a11y
   - js
+socialImage: 'https://geoffrich.net/images/social/accessible-svelte-transitions.png'
 ---
 
 Svelte's built-in [transition](https://svelte.dev/tutorial/transition) functionality makes it easy to animate elements as they are added to and removed from the DOM. It's as simple as adding a `transition:` directive to an element and passing one of the built-in transition functions.
