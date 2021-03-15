@@ -22,7 +22,7 @@ There are two options to apply the user's motion preference to Svelte's transiti
 
 ## Option 1: Globally disable all animation
 
-Since Svelte's built-in transitions are applied in CSS, we can disable them in CSS. The [prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) media query will detect if the user has requested reduced motion in their device settings. You can add the following to your global styles to disable all CSS animation.
+Since Svelte's built-in transitions are applied in CSS, we can disable them in CSS. The prefers-reduced-motion media query will detect if the user has requested reduced motion in their device settings. You can add the following to your global styles to disable all CSS animation.
 
 ```css
 @media (prefers-reduced-motion: reduce) {
