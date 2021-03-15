@@ -11,7 +11,7 @@ socialImage: 'https://geoffrich.net/images/social/accessible-svelte-transitions.
 
 Svelte's built-in [transition](https://svelte.dev/tutorial/transition) functionality makes it easy to animate elements as they are added to and removed from the DOM. It's as simple as adding a `transition:` directive to an element and passing one of the built-in transition functions.
 
-However, we need to be mindful of accessibility issues around motion animation. Some transitions could trigger motion sickness for those with motion sensitivities. I will go over which Svelte transitions could cause accessibility issues and how to remove or replace them based on the user's preference.
+However, we need to be mindful of accessibility issues around animation. Some transitions could trigger motion sickness for those with motion sensitivities. I will go over which Svelte transitions could cause accessibility issues and how to remove or replace them based on the user's preference.
 
 ## What kind of animations cause motion sickness?
 
@@ -85,6 +85,9 @@ $: cardTransition = $reducedMotion ? customFade : fly;
 If you often find yourself making the same replacement, we can move this logic into a reactive store that can be used in any component.
 
 ```js
+import {derived} from 'svelte/store';
+import {fly, fade} from 'svelte/transition';
+
 const accessibleFly = derived(reducedMotion, ($reducedMotion, set) => {
   if ($reducedMotion) {
     set(fade);
@@ -94,7 +97,7 @@ const accessibleFly = derived(reducedMotion, ($reducedMotion, set) => {
 });
 ```
 
-This store is derived from our `reducedMotion` store. The value of the store can be used as a replacement for Svelte's built-in fly transition. When the value of `reducedMotion` changes, this store will automatically replace fly with fade. We can use the value of this store in the transition directive on an element.
+This store is derived from our `reducedMotion` store. When the value of `reducedMotion` changes, this store will automatically replace fly with fade. We can use the value of this store as a replacement for Svelte's built-in fly transition.
 
 {% raw %}
 
@@ -106,9 +109,9 @@ This store is derived from our `reducedMotion` store. The value of the store can
 
 ## Wrapping up
 
-You have two options to respect the user's motion preference when using Svelte transitions. You can disable all animations globally in CSS, which is the safest option but also disables animations that do not trigger motion sickness. Alternatively, you can react to changes to prefers-reduced-motion and replace problematic transitions with a safer option when the user requests it, but this requires vigilance whenever implementing a new transition.
+You have two options to respect the user's motion preference when using Svelte transitions. You can disable all animations globally in CSS, which is the safest option but also disables animations that do not trigger motion sickness. Alternatively, you can swap out problematic transitions with a safer option when the user requests it, but this requires vigilance whenever implementing a new transition.
 
-We all need to do our part to make the web a more accessible place. If you want to learn more about motion sensitivities and the web, I've linked some articles below that I found helpful while working on this piece.
+We all should do our part to make the web a more accessible place. If you want to learn more about motion sensitivities and the web, I've linked some articles below that I found helpful while working on this piece.
 
 - "Designing With Reduced Motion For Motion Sensitivities" by Val Head, [Smashing Magazine](https://www.smashingmagazine.com/2020/09/design-reduced-motion-sensitivities/)
 - "Designing Safer Web Animation For Motion Sensitivity" by Val Head, [A List Apart](https://alistapart.com/article/designing-safer-web-animation-for-motion-sensitivity/)
