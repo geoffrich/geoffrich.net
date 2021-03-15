@@ -1,6 +1,6 @@
 ---
 title: How I ported a React hover animation to Svelte
-date: '2020-12-09'
+date: '3000-12-09'
 tags:
   - svelte
   - svelte:action
