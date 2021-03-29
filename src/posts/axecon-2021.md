@@ -3,6 +3,7 @@ title: 4 takeaways from axe-con 2021
 date: '2021-03-29'
 tags:
   - a11y
+socialImage: 'https://geoffrich.net/images/social/axecon-2021.png'
 ---
 
 I recently had the pleasure of attending Deque's [axe-con](https://www.deque.com/axe-con/) digital accessibility conference. Over the course of two days, I attended multiple sessions about many different facets of accessibility. I mainly focused on the developer track at the conference, though I sampled a few talks from other tracks. Here are some of the highlights and what I took away from the sessions I attended.
