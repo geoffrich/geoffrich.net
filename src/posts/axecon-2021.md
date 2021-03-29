@@ -1,6 +1,6 @@
 ---
 title: 4 takeaways from axe-con 2021
-date: '2021-03-15'
+date: '2021-03-29'
 tags:
   - a11y
 ---
