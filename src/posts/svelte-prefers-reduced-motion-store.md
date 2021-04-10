@@ -3,7 +3,6 @@ title: A Svelte store for prefers-reduced-motion
 date: '2021-03-01'
 tags:
   - svelte
-  - svelte:store
   - a11y
   - js
 socialImage: 'https://geoffrich.net/images/social/svelte-reduced-motion.png'

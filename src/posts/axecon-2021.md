@@ -3,6 +3,7 @@ title: 4 takeaways from axe-con 2021
 date: '2021-03-29'
 tags:
   - a11y
+  - conference
 socialImage: 'https://geoffrich.net/images/social/axecon-2021.png'
 ---
 

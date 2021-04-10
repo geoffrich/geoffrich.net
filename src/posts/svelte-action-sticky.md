@@ -3,10 +3,7 @@ title: Detecting sticky positioning with Svelte actions
 date: '2020-12-02'
 tags:
   - svelte
-  - svelte:action
-  - html
   - css
-  - css:position
   - js
 socialImage: 'https://geoffrich.net/images/social/svelte-action-sticky.png'
 ---
