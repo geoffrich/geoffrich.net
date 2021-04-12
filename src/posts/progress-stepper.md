@@ -3,6 +3,7 @@ title: Building a progress stepper
 date: '2020-10-17'
 tags:
   - front-end challenges club
+  - a11y
   - html
   - css
   - js

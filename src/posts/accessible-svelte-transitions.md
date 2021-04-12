@@ -3,7 +3,6 @@ title: Accessible Svelte transitions
 date: '2021-03-15'
 tags:
   - svelte
-  - svelte:transition
   - a11y
   - js
 socialImage: 'https://geoffrich.net/images/social/accessible-svelte-transitions.png'
