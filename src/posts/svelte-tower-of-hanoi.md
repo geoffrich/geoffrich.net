@@ -26,9 +26,9 @@ We can make our Svelte templates recursive using the `<svelte:self>` element.
 
 You can include a Svelte component recursively using the [`<svelte:self>` element](https://svelte.dev/docs#svelte_self). A common use for this element is a comment thread, e.g. on the [Svelte Hacker News clone](https://hn.svelte.dev/).
 
-Since using the element by itself could cause an infinite loop, the Svelte compiler requires you to place `<svelte:self>` inside an if or each block, or inside a slot passed to a component.
+Since using the element by itself without any conditions causes an infinite loop, the Svelte compiler requires you to place `<svelte:self>` inside an if or each block, or inside a slot passed to a component.
 
-For example, this would not compile because it causes an infinite loop:
+For example, this would not compile because there is no point where the component will stop rendering itself.
 
 ```svelte
 <script>
@@ -54,7 +54,7 @@ Adding an if statement to the above example will stop the recursion once `count`
 
 You can check out the [Svelte tutorial](https://svelte.dev/tutorial/svelte-self) for another example of svelte:self in action.
 
-You still need to be careful with the svelte:self element, since you can use it inside an if statement and still cause an infinite loop. For example, incrementing `count` in the above component will result in an infinite loop since count will never be less than zero. Svelte will compile this component without issue, but rendering it in the browser will result in a ["too much recursion" error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Too_much_recursion) logged to the console. Just because it compiles doesn't mean it's safe!
+Even with the compiler safeguards, you still need to be careful with the svelte:self element. You can place it inside an if statement and still cause an infinite loop. For example, incrementing `count` in the above component will result in an infinite loop since count will never be less than zero. Svelte will compile this component without issue, but rendering it in the browser will result in a ["too much recursion" error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Too_much_recursion) logged to the console. Just because it compiles doesn't mean it's safe!
 
 ## Writing a solution
 
@@ -110,7 +110,7 @@ Instead of a function that recursively calls itself, we can write this as a Svel
 {/if}
 ```
 
-Each line of the function translates to its Svelte equivalent. `if` and `else` translate to if/else blocks, `tower()` becomes a call to `<svelte:self>`, and instead of `console.log`, we render a list item.
+Each line of the function directly translates to Svelte template syntax. `if` and `else` translate to if/else blocks, `tower()` becomes `<svelte:self>`, and instead of `console.log`, we render a list item.
 
 Our component can be used like so:
 
