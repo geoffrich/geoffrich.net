@@ -1,6 +1,6 @@
 ---
 title: What accessibility issues does Svelte detect?
-date: '2021-04-15'
+date: '2021-04-19'
 tags:
   - a11y
   - svelte
