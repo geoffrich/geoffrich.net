@@ -13,5 +13,10 @@
     &:hover {
       text-decoration: underline;
     }
+
+    svg {
+      height: 1.3em;
+      vertical-align: bottom;
+    }
   }
 }

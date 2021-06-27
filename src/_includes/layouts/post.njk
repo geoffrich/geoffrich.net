@@ -11,8 +11,8 @@
 </p>
 {% endset %}
 
-{% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-{% set nextPost = collections.posts | getNextCollectionItem(page) %}
+{% set previousPost = collections.internalPosts | getPreviousCollectionItem(page) %}
+{% set nextPost = collections.internalPosts | getNextCollectionItem(page) %}
 {% block content %}
   <main id="main-content" tabindex="-1">
     <article class="[ post ] [ h-entry ]">
