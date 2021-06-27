@@ -16,15 +16,24 @@ permalink: '/feed.xml'
   <email>{{ site.authorEmail }}</email>
 	</author>
 	{% for post in collections.postsReverse %}
+  {% set isExternal = post.data.permalink == false %}
+  {% if isExternal %}
+  {% set absolutePostUrl = post.data.externalUrl %}
+  {% else %}
   {% set absolutePostUrl %}{{ site.url }}{{ post.url | url }}{% endset %}
+  {% endif %}
   <entry>
     <title>{{ post.data.title }}</title>
     <link href="{{ absolutePostUrl }}"/>
     <updated>{{ post.date | rssDate }}</updated>
     <id>{{ absolutePostUrl }}</id>
+    {% if isExternal %}
+    <summary>Posted on {{ post.data.publication }}: {{ post.data.summary }}</summary>
+    {% else %}
     <content type="html"><![CDATA[
       {{ post.templateContent | safe }}
     ]]></content>
+    {% endif %}
   </entry>
 	{% endfor %}
 </feed>

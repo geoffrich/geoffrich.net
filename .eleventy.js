@@ -2,7 +2,7 @@ const rssPlugin = require('@11ty/eleventy-plugin-rss');
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 require('prism-svelte');
 const fs = require('fs');
-const embedSvelte = require('eleventy-plugin-embed-svelte').default;
+const embedSvelte = require('eleventy-plugin-embed-svelte');
 
 // Import filters
 const dateFilter = require('./src/filters/date-filter.js');
@@ -47,6 +47,7 @@ module.exports = function(config) {
 
   // Custom collections
   const livePosts = post => post.date <= now && !post.data.draft;
+  const internalPosts = post => post.data.permalink !== false;
   config.addCollection('posts', collection => {
     return [...collection.getFilteredByGlob('./src/posts/*.md').filter(livePosts)];
   });
@@ -61,6 +62,15 @@ module.exports = function(config) {
     return [...collection.getFilteredByGlob('./src/posts/*.md').filter(livePosts)]
       .reverse()
       .slice(0, site.maxPostsPerPage);
+  });
+
+  config.addCollection('internalPosts', collection => {
+    return [
+      ...collection
+        .getFilteredByGlob('./src/posts/*.md')
+        .filter(livePosts)
+        .filter(internalPosts)
+    ];
   });
 
   // Plugins
