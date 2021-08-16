@@ -53,3 +53,8 @@ Does [style directive RFC](https://github.com/plmrry/rfcs/blob/style-directives/
 [Benefits](https://twitter.com/Rich_Harris/status/1285957952298528769) of Svelte's approach vs CSS-in-JS
 
 [Why doesn't Svelte scope under root element](https://stackoverflow.com/questions/60054062/why-doesnt-svelte-scope-the-tag-under-a-class-but-use-individual-tag-class-to-s)?
+
+Misc:
+
+- Why parent shouldn't affect child: https://twitter.com/Rich_Harris/status/1286747785656705024
+- original issue that added it: https://github.com/sveltejs/svelte/issues/8
