@@ -1,10 +1,39 @@
 ---
 title: How Svelte scopes styles
-date: '2021-08-15'
+date: '2021-08-24'
 tags:
   - svelte
 socialImage: 'TODO'
 ---
+
+By default, any styles you write in a Svelte component are scoped to that component. This means that the `p` selector in the following code won't affect any `<p>` elements outside of this component.
+
+```svelte
+<p>This is a paragraph with scoped styles.</p>
+
+<style>
+  /* I only affect elements in this component */
+  p {
+    color: green;
+  }
+</style>
+```
+
+But how does this scoping actually work? In this post, I'll get into the nitty-gritty of how your styles are scoped to your component, and the implications that has on the rest of your app.
+
+This blog post is accurate for the Svelte version at time of writing (v3.42.1). However, the implementation of Svelte's style scoping could change at a later date, so this post may not stay accurate.
+
+## Making a hash of things
+
+## Class up the joint
+
+When working on a Svelte app, you may have inspected the rendered markup and see a bunch of classes you didn't add. Why are those there?
+
+### Customization and why you might want to
+
+## Addendum: a brief history of Svelte's scoped styles
+
+## Misc notes
 
 Hash added to class of elements in the component that are styled (implementation in Stylesheet.ts)
 
@@ -58,3 +87,7 @@ Misc:
 
 - Why parent shouldn't affect child: https://twitter.com/Rich_Harris/status/1286747785656705024
 - original issue that added it: https://github.com/sveltejs/svelte/issues/8
+- introduced in Ractive: https://github.com/ractivejs/ractive/issues/452
+- [zen of just writing CSS](https://svelte.dev/blog/the-zen-of-just-writing-css)
+
+Perf implications -- see Nolan Lawson post
