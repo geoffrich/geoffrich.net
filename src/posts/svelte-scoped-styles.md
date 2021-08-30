@@ -89,5 +89,6 @@ Misc:
 - original issue that added it: https://github.com/sveltejs/svelte/issues/8
 - introduced in Ractive: https://github.com/ractivejs/ractive/issues/452
 - [zen of just writing CSS](https://svelte.dev/blog/the-zen-of-just-writing-css)
+- global styles aren't removed when component is destroyed: https://github.com/sveltejs/svelte/issues/5530
 
 Perf implications -- see Nolan Lawson post
