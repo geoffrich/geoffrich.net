@@ -19,17 +19,94 @@ By default, any styles you write in a Svelte component are scoped to that compon
 </style>
 ```
 
+This is powerful because it means you don't have to worry about accidentally styling anything outside the component, and you can write a lot more generic selectors.
+
 But how does this scoping actually work? In this post, I'll get into the nitty-gritty of how your styles are scoped to your component, and the implications that has on the rest of your app.
 
 This blog post is accurate for the Svelte version at time of writing (v3.42.1). However, the implementation of Svelte's style scoping could change at a later date, so this post may not stay accurate.
 
+## Classing up the joint
+
+When working on a Svelte app, you may have inspected the rendered markup and see a bunch of classes you didn't add. Why are those there? Svelte applies those classes to styled elements in your app to ensure that styles you write in that component only apply to elements in your component.
+
+For example, the component above is transformed into the following.
+
+```html
+<p class="svelte-dvinuz">This is a paragraph with scoped styles.</p>
+
+<style>
+  p.svelte-dvinuz {
+    color: green;
+  }
+</style>
+```
+
+This rule won't apply to `<p>` elements outside of the component, because they won't have that class applied. Only elements inside the component will have that component's special class applied, and thus match the selector in the generated styles.
+
+### More complex selectors
+
+Let's look at what happens when the selectors become more complicated. The following component uses child selectors. This is not strictly necessary in this example case (you could simply target `span`), but it's a useful illustration.
+
+```svelte
+<ul>
+	<li>Apples <span>🍎</span></li>
+	<li>Bananas <span>🍌</span></li>
+	<li>Carrots <span>🥕</span></li>
+</ul>
+
+<style>
+	ul li {
+		font-size: 18px;
+	}
+
+	ul li span {
+		font-size: 24px;
+	}
+</style>
+```
+
+In this case, the styles are transformed to the following.
+
+```css
+ul.svelte-gxa857 li.svelte-gxa857 {
+  font-size: 18px;
+}
+ul.svelte-gxa857 li span.svelte-gxa857 {
+  font-size: 24px;
+}
+```
+
+Note that Svelte does not apply the class (in this case `svelte-gxa857`) to every part of the selector. Instead, it only applies it to the first and last part of the selector. This is to prevent descendant combinators from matching a child component (todo: example).
+
+If you know about CSS specificity, you might have noticed a subtle bug here. Multi-part selectors have two classes added to the rule, while single selectors have only one. This means some selectors will have their specificity increased by 2 class points while others will have their specificity only increased by 1. Theoretically this means that the applied style is not what you would expect from the raw CSS.
+
+Svelte fixes this an interestingly way. It keeps track of what the max number of classes it added to a CSS rule is, and it makes sure all selectors have their specificity increased by that same amount.
+
+(TODO: example)
+
+Something about global here?
+
+Something about increasing specificity here?
+
 ## Making a hash of things
 
-## Class up the joint
-
-When working on a Svelte app, you may have inspected the rendered markup and see a bunch of classes you didn't add. Why are those there?
+The class names Svelte generates are not random, even though they might look that way.
 
 ### Customization and why you might want to
+
+`cssHash` compiler option
+
+## :global domination
+
+How does scoping work with global styles?
+
+### Scope creep
+
+Even when you scope to a container, global styles can still "leak down" (which might be what you want!)
+
+## Implications
+
+Additional classes added
 
 ## Addendum: a brief history of Svelte's scoped styles
 
