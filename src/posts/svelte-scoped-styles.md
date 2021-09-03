@@ -27,7 +27,7 @@ This blog post is accurate for the Svelte version at time of writing (v3.42.1). 
 
 ## Classing up the joint
 
-When working on a Svelte app, you may have inspected the rendered markup and see a bunch of classes you didn't add. Why are those there? Svelte applies those classes to styled elements in your app to ensure that styles you write in that component only apply to elements in your component.
+When working on a Svelte app, you may have inspected the rendered markup and see a bunch of CSS classes you didn't add. Why are those there? Svelte applies those classes to styled elements in your app to ensure that styles you write in that component only apply to elements in your component.
 
 For example, the component above is transformed into the following.
 
@@ -78,11 +78,75 @@ ul.svelte-gxa857 li span.svelte-gxa857 {
 
 Note that Svelte does not apply the class (in this case `svelte-gxa857`) to every part of the selector. Instead, it only applies it to the first and last part of the selector. This is to prevent descendant combinators from matching a child component (todo: example).
 
-If you know about CSS specificity, you might have noticed a subtle bug here. Multi-part selectors have two classes added to the rule, while single selectors have only one. This means some selectors will have their specificity increased by 2 class points while others will have their specificity only increased by 1. Theoretically this means that the applied style is not what you would expect from the raw CSS.
+Now if you think you have a handle on things... what do you think Svelte will output if we add a style to the `ul`?
+
+```css
+ul {
+  background-color: lightblue;
+}
+
+ul li {
+  font-size: 18px;
+}
+
+ul li span {
+  font-size: 24px;
+}
+```
+
+In this case, Svelte outputs the following CSS:
+
+```css
+ul.svelte-1vfiehr.svelte-1vfiehr {
+  background-color: lightblue;
+}
+
+ul.svelte-1vfiehr li.svelte-1vfiehr {
+  font-size: 18px;
+}
+
+ul.svelte-1vfiehr li span.svelte-1vfiehr {
+  font-size: 24px;
+}
+```
+
+Woah! Svelte transformed the last two selectors the same way, but added the hash class twice to the first `ul` selector! Why would it do that?
+
+This traces back to a concept called _CSS specificity_. Specificity is how the browser determines what CSS rules should take precedence over another. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) has a great page explaining all the different ins and outs, but in general, certain types of CSS selectors are more specific and thus have higher precedence over others. For instance, a class selector (like `.list`) is more specific than an element selector (like `ul`). Also, the more of a type of a selector in a given CSS rule, the more specific it is. So, a selector with two classes will be more specific than a selector with one class.
+
+With this knowledge, let's understand why Svelte adds two class selectors to the first rule instead of one.
+
+Multi-part selectors have two classes added to the rule, while single selectors have only one. This means some selectors will have their specificity increased by 2 class points while others will have their specificity only increased by 1. Theoretically this means that the applied style is not what you would expect from the raw CSS.
 
 Svelte fixes this an interestingly way. It keeps track of what the max number of classes it added to a CSS rule is, and it makes sure all selectors have their specificity increased by that same amount.
 
-(TODO: example)
+If Svelte didn't do this, the following would cause issues. The first selector would have two classes added, so it would take precedence. You might only notice this if you were familiar with CSS specificity, or or were porting the component from a non-Svelte project.
+
+```svelte
+<ul>
+	<li><span class="name">Apples</span> <span>🍎</span></li>
+	<li><span class="name">Bananas</span> <span>🍌</span></li>
+	<li><span class="name">Carrots</span> <span>🥕</span></li>
+</ul>
+
+<style>
+	ul li span {
+		font-size: 24px;
+	}
+
+	.name {
+		font-size: 18px;
+	}
+</style>
+```
+
+So one issue is fixed, but another is introduced. What if you rely on an external stylesheet that you also want to apply to your component?
+
+You can
+
+- artificially increase specificity
+- is there a way to prevent Svelte from doing this?
+- example
 
 Something about global here?
 
