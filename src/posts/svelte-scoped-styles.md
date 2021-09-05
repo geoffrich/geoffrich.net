@@ -45,7 +45,7 @@ This rule won't apply to `<p>` elements outside of the component, because they w
 
 ### More complex selectors
 
-Let's look at what happens when the selectors become more complicated. The following component uses child selectors. This is not strictly necessary in this example case (you could simply target `span`), but it's a useful illustration.
+Let's look at what happens when the selectors become more complicated. The following component uses descendant selectors. This is not strictly necessary in this example case (you could simply target `span`), but it's useful for illustration.
 
 ```svelte
 <ul>
@@ -65,7 +65,13 @@ Let's look at what happens when the selectors become more complicated. The follo
 </style>
 ```
 
-In this case, the styles are transformed to the following.
+What are the different options for how Svelte could transform this component?
+
+One option would be to only apply the scoping class to the first element in the selector, so the selectors become `ul.svelte li` and `ul.svelte li span`. However, this could cause unwanted style leakage&mdash;if there were child components, they could potentially match the selector (TODO: elaborate?).
+
+Another option is to apply the scoping class to every element in the selector, so the rules would become `ul.svelte li.svelte` and `ul.svelte li.svelte span.svelte`. This _would_ prevent any styles from leaking to child components, but it does add the class more times than is necessary.
+
+What Svelte actually does is somewhere in the middle: it applies the scoping class to the first and last part of the selector. The styles are transformed to the following:
 
 ```css
 ul.svelte-gxa857 li.svelte-gxa857 {
@@ -76,7 +82,7 @@ ul.svelte-gxa857 li span.svelte-gxa857 {
 }
 ```
 
-Note that Svelte does not apply the class (in this case `svelte-gxa857`) to every part of the selector. Instead, it only applies it to the first and last part of the selector. This is to prevent descendant combinators from matching a child component (todo: example).
+This is the best of both worlds: styles don't leak out (because the selector must start and end inside the component), and we don't add more classes than necessary.
 
 Now if you think you have a handle on things... what do you think Svelte will output if we add a style to the `ul`?
 
@@ -110,15 +116,27 @@ ul.svelte-1vfiehr li span.svelte-1vfiehr {
 }
 ```
 
-Woah! Svelte transformed the last two selectors the same way, but added the hash class twice to the first `ul` selector! Why would it do that?
+Woah! Svelte transformed the last two selectors the same way, but added the hash class _twice_ to the first `ul` selector! Why would it do that?
 
-This traces back to a concept called _CSS specificity_. Specificity is how the browser determines what CSS rules should take precedence over another. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) has a great page explaining all the different ins and outs, but in general, certain types of CSS selectors are more specific and thus have higher precedence over others. For instance, a class selector (like `.list`) is more specific than an element selector (like `ul`). Also, the more of a type of a selector in a given CSS rule, the more specific it is. So, a selector with two classes will be more specific than a selector with one class.
+This traces back to a concept called _CSS specificity_. [Specificity](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) is how the browser determines what CSS rules should take precedence over another. In general, certain types of CSS selectors are more specific and thus have higher priority than others. For instance, a class selector (like `.list`) is more specific than an element selector (like `ul`). Also, the amount of each type of selector matters. The more of a type of a selector in a given CSS rule, the more specific it is. So, a selector with two classes will be more specific than a selector with one class.
 
-With this knowledge, let's understand why Svelte adds two class selectors to the first rule instead of one.
+I'm drastically over-simplifying things (specificity can support an entire blog post in itself!), so check out [web.dev's CSS Course](https://web.dev/learn/css/specificity/) for more details.
+
+So, the reason Svelte adds two class selectors instead of one is to keep the specificity order intact. Before the scoping classes were added, the selectors had the following specificity order (from highest to lowest):
+
+1. `ul li span` (specificity 0-0-3)
+1. `ul li` (specificity 0-0-2)
+1. `ul` (specificity 0-0-1)
+
+But after the classes were added the specificity changed. Here's what the specificity would've been if Svelte didn't add the extra scoping class:
+
+1. ul.svelte-1vfiehr li span.svelte-1vfiehr (specificity 0-2-3)
+1. ul.svelte-1vfiehr li.svelte-1vfiehr (specificity 0-2-2)
+1. ul.svelte-1vfiehr (specificity 0-1-1)
 
 Multi-part selectors have two classes added to the rule, while single selectors have only one. This means some selectors will have their specificity increased by 2 class points while others will have their specificity only increased by 1. Theoretically this means that the applied style is not what you would expect from the raw CSS.
 
-Svelte fixes this an interestingly way. It keeps track of what the max number of classes it added to a CSS rule is, and it makes sure all selectors have their specificity increased by that same amount.
+Svelte fixes this in an interesting way. It keeps track of what the max number of classes it added to a CSS rule is, and it makes sure all selectors have their specificity increased by that same amount.
 
 If Svelte didn't do this, the following would cause issues. The first selector would have two classes added, so it would take precedence. You might only notice this if you were familiar with CSS specificity, or or were porting the component from a non-Svelte project.
 
@@ -140,7 +158,7 @@ If Svelte didn't do this, the following would cause issues. The first selector w
 </style>
 ```
 
-So one issue is fixed, but another is introduced. What if you rely on an external stylesheet that you also want to apply to your component?
+So one issue is fixed, but another is introduced. What if you rely on an external stylesheet that you also want to apply to your component? (e.g. `a[href]` or `a:hover` should beat `a`)
 
 You can
 
