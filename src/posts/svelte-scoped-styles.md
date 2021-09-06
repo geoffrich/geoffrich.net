@@ -52,19 +52,19 @@ Let's look at what happens when the CSS rules become more complicated. The follo
 
 ```svelte
 <ul>
-	<li>Apples <span>🍎</span></li>
-	<li>Bananas <span>🍌</span></li>
-	<li>Carrots <span>🥕</span></li>
+  <li>Apples <span>🍎</span></li>
+  <li>Bananas <span>🍌</span></li>
+  <li>Carrots <span>🥕</span></li>
 </ul>
 
 <style>
-	ul li {
-		font-size: 18px;
-	}
+  ul li {
+    font-size: 18px;
+  }
 
-	ul li span {
-		font-size: 24px;
-	}
+  ul li span {
+    font-size: 24px;
+  }
 </style>
 ```
 
@@ -93,19 +93,19 @@ Now if you think you have a handle on things, let's tweak our markup and styles 
 
 ```svelte
 <ul>
-	<li><span class="name">Apples</span> <span>🍎</span></li>
-	<li><span class="name">Bananas</span> <span>🍌</span></li>
-	<li><span class="name">Carrots</span> <span>🥕</span></li>
+  <li><span class="name">Apples</span> <span>🍎</span></li>
+  <li><span class="name">Bananas</span> <span>🍌</span></li>
+  <li><span class="name">Carrots</span> <span>🥕</span></li>
 </ul>
 
 <style>
-	ul li span {
-		font-size: 24px;
-	}
+  ul li span {
+    font-size: 24px;
+  }
 
-	.name {
-		font-size: 18px;
-	}
+  .name {
+    font-size: 18px;
+  }
 </style>
 ```
 
@@ -167,9 +167,9 @@ Then, in a Svelte component, you override the default link color:
 <a href="https://svelte.dev">Svelte homepage</a>
 
 <style>
-	a {
-		color: red;
-	}
+  a {
+    color: red;
+  }
 </style>
 ```
 
