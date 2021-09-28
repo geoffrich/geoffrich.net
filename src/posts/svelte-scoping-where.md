@@ -9,11 +9,11 @@ socialImage: 'https://geoffrich.net/images/social/svelte-scoping-where.png'
 
 _Or, alliteratively: Settling Svelte's style scoping specificity wars with :where_
 
-In my previous post on Svelte style scoping, I lied to you. When talking about how Svelte's style scoping can unexpectedly increase CSS specificity, I said:
+In my previous post on [Svelte's style scoping](/posts/svelte-scoped-styles/), I lied to you. When talking about how Svelte's style scoping can unexpectedly increase CSS specificity, I said:
 
 > Svelte needs to add _something_ to the CSS rules to make sure they only apply to a single component, and that will increase the specificity.
 
-That's not entirely accurate. The first part is true — Svelte does need to add _something_ to the CSS. However, that doesn't need to increase specificity. In fact, there is a CSS selector that will _not_ increase specificity: [`:where`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where). It can be used like so:
+That's not entirely accurate. The first part is true&mdash;Svelte does need to add _something_ to the CSS. However, that doesn't need to increase specificity. In fact, there is a CSS selector that will _not_ increase specificity: [`:where`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where). It can be used like so:
 
 ```css
 /* :where takes a list of selectors */
@@ -31,7 +31,7 @@ h3 p {
 
 Because `:where` has 0 specificity, the first rule in the example above has a specificity of 1 (the same as a single `p` selector), while the second has a specificity of 2 (since there are two element selectors).
 
-So, how does `:where` relate to style scoping? First, let's review Svelte's current scoping method.
+So, how can `:where` improve Svelte's style scoping? First, let's review Svelte's current scoping method.
 
 ## A brief recap
 
@@ -79,9 +79,9 @@ Because it is inside `:where`, `.svelte-dvinuz` does not increase the specificit
 However, at the moment, I don't think this method is a drop-in replacement for Svelte's class-based style scoping:
 
 - **Browser support could be better**: while the selector is supported in all evergreen browsers, that's only [86% of web users](https://caniuse.com/mdn-css_selectors_where) globally at time of writing. This includes the basically-dead IE11, yes, but also a fairly-recent iOS version (13) and Samsung Internet (which has a similar market share to Firefox, according to Can I Use). In many cases, this would be sufficient support to try out new CSS features. However...
-- **There's no graceful degradation**: because `:where` would be present in every CSS rule that came from a Svelte component, browsers that don't support it would ignore those styles entirely. This would be a deal-breaker for many apps. There's also no way to polyfill `:where` like you can with modern JS syntax without breaking the scoping behavior.
+- **There's no graceful degradation**: because `:where` would be present in every CSS rule that came from a Svelte component, browsers that don't support it would ignore those styles entirely. Many apps would have no styles at all for users on older browsers. And unlike modern JS syntax, there's no way to polyfill `:where`, at least not without breaking the scoping behavior.
 - **Breaking change**: because the specificity of styles in a Svelte component is reduced, some global styles would start applying where they wouldn't previously.
-- **Possible size increase**: `:where(svelte-hash)` is more characters than `.svelte-hash`, though it is shorter than `.svelte-hash.svelte-hash` (when two scoping classes are added). In some cases, I would expect the CSS size to increase. However, the impact on the generated CSS is likely minimal due to compression.
+- **Possible size increase**: `:where(svelte-hash)` is more characters than `.svelte-hash`, though it is shorter than adding two scoping classes. In some cases, I would expect the CSS size to increase (though the impact on the generated CSS is likely minimal due to compression).
 
 For these reasons, if Svelte were to implement this kind of scoping, it would need to either be in a major version bump (Svelte v4?) or in a new configuration option that devs could opt-in to.
 
