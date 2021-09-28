@@ -13,7 +13,7 @@ In my previous post on [Svelte's style scoping](/posts/svelte-scoped-styles/), I
 
 > Svelte needs to add _something_ to the CSS rules to make sure they only apply to a single component, and that will increase the specificity.
 
-That's not entirely accurate. The first part is true&mdash;Svelte does need to add _something_ to the CSS. However, that doesn't need to increase specificity. In fact, there is a CSS selector that will _not_ increase specificity: [`:where`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where). It can be used like so:
+That's not entirely accurate. The first part is true&mdash;Svelte does need to add _something_ to the CSS. However, that doesn't need to increase specificity. In fact, there is a CSS pseudo-class that will _not_ increase specificity: [`:where`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where). It can be used like so:
 
 ```css
 /* :where takes a list of selectors */
@@ -78,7 +78,7 @@ Because it is inside `:where`, `.svelte-dvinuz` does not increase the specificit
 
 However, at the moment, I don't think this method is a drop-in replacement for Svelte's class-based style scoping:
 
-- **Browser support could be better**: while the selector is supported in all evergreen browsers, that's only [86% of web users](https://caniuse.com/mdn-css_selectors_where) globally at time of writing. This includes the basically-dead IE11, yes, but also a fairly-recent iOS version (13) and Samsung Internet (which has a similar market share to Firefox, according to Can I Use). In many cases, this would be sufficient support to try out new CSS features. However...
+- **Browser support could be better**: while `:where` is supported in all evergreen browsers, that's only [86% of web users](https://caniuse.com/mdn-css_selectors_where) globally at time of writing. This includes the basically-dead IE11, yes, but also a fairly-recent iOS version (13) and Samsung Internet (which has a similar market share to Firefox, according to Can I Use). In many cases, this would be sufficient support to try out new CSS features. However...
 - **There's no graceful degradation**: because `:where` would be present in every CSS rule that came from a Svelte component, browsers that don't support it would ignore those styles entirely. Many apps would have no styles at all for users on older browsers. And unlike modern JS syntax, there's no way to polyfill `:where`, at least not without breaking the scoping behavior.
 - **Breaking change**: because the specificity of styles in a Svelte component is reduced, some global styles would start applying where they wouldn't previously.
 - **Possible size increase**: `:where(svelte-hash)` is more characters than `.svelte-hash`, though it is shorter than adding two scoping classes. In some cases, I would expect the CSS size to increase (though the impact on the generated CSS is likely minimal due to compression).

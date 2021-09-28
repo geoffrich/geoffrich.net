@@ -184,6 +184,8 @@ This problem is exacerbated when Svelte adds multiple scoping classes. If Svelte
 
 There's currently an open [Svelte issue](https://github.com/sveltejs/svelte/issues/4374) objecting to Svelte adding more than one scoping class, though it's not clear how to solve it without re-introducing the original [issue around specificity order](https://github.com/sveltejs/svelte/issues/1277). There isn't an obvious improvement to be made in the Svelte compiler either&mdash;Svelte needs to add _something_ to the CSS rules to make sure they only apply to a single component, and that will increase the specificity. Perhaps [native CSS scoping](https://drafts.csswg.org/css-scoping-2/#scoped-styles) will help, though the spec is still being drafted. Until then, the cost of Svelte's style scoping is some occasional specificity clashes.
 
+EDIT: in fact, there is a way to scope styles without increasing specificity! I [wrote a post about it](/posts/svelte-scoping-where/).
+
 ## Wrapping up
 
 I hope this article helped you understand Svelte's CSS scoping behavior better. Understanding why the compiler makes the decisions it does can help you write better Svelte components and make debugging easier.
