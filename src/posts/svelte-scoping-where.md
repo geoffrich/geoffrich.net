@@ -29,7 +29,7 @@ h3 p {
 }
 ```
 
-Because `:where` has 0 specificity, the first rule in the example above has a specificity of 1 (the same as a single `p` selector), while the second has a specificity of 2 (since there are two element selectors).
+Because `:where` has 0 specificity, the first rule in the example above has a specificity of 0-0-1 (the same as a single `p` selector), while the second has a specificity of 0-0-2 (since there are two element selectors).
 
 So, how can `:where` improve Svelte's style scoping? First, let's review Svelte's current scoping method.
 
@@ -74,7 +74,7 @@ Instead of adding the scoping class directly, Svelte _could_ wrap it in `:where(
 </style>
 ```
 
-Because it is inside `:where`, `.svelte-dvinuz` does not increase the specificity of the original CSS rule. Instead of gaining 10 points of specificity (for a total of 11), it keeps a specificity of 1. This means the rules you write in your Svelte component will more predictably interact with your global styles.
+Because it is inside `:where`, `.svelte-dvinuz` does not increase the specificity of the original CSS rule. Instead of increasing the style's specificity to 0-1-1, it keeps the original specificity of 0-0-1. This means the rules you write in your Svelte component will more predictably interact with your global styles.
 
 However, at the moment, I don't think this method is a drop-in replacement for Svelte's class-based style scoping:
 
