@@ -6,7 +6,7 @@ tags:
 socialImage: 'https://geoffrich.net/images/social/rich-harris-podrocket.png'
 ---
 
-LogRocket's podcast [PodRocket](https://podrocket.logrocket.com/) released a [new episode with Rich Harris](https://podrocket.logrocket.com/rich-harris), the creator of [Svelte](https://svelte.dev/), this morning. There were so many good insights in it that I wanted to pull out some choice quotes and take some notes to share this in a non-audio medium.
+LogRocket's podcast [PodRocket](https://podrocket.logrocket.com/) released a [new episode](https://podrocket.logrocket.com/rich-harris) with Rich Harris, the creator of [Svelte](https://svelte.dev/), this morning. There were so many good insights in it that I wanted to pull out some choice quotes and take some notes to share this in a non-audio medium.
 
 I highly recommend listening to the full episode, especially if you're new to Svelte. Even if you're already familiar with Svelte, there are still some great insights to Svelte's philosophy and its position in the current framework landscape.
 
