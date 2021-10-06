@@ -7,7 +7,7 @@ tags:
 socialImage: 'https://geoffrich.net/images/social/marvel-unlimited-by-year.png'
 ---
 
-_tl;dr I launched a [new site](https://marvel.geoffrich.net/) where you can see Marvel comics published in a [given year](https://marvel.geoffrich.net/year) and retrieve a [random comic](https://marvel.geoffrich.net/comic/random) available on the Marvel Unlimited app_
+_tl;dr I launched a [new site](https://marvel.geoffrich.net/) where you can see Marvel comics published in a [given year](https://marvel.geoffrich.net/year) and retrieve a [random comic](https://marvel.geoffrich.net/comic/random) available on the Marvel Unlimited app. The code is [open source](https://github.com/geoffrich/marvel-by-year) on GitHub._
 
 On September 9, the Marvel Unlimited app (MU), which lets you read tens of thousands of Marvel's comics for a monthly fee, got a huge update. While it added some long awaited features such as unlimited downloads, it also wreaked havoc on users' reading history and libraries and removed some beloved features.
 
@@ -44,7 +44,7 @@ I posted this project on the [Marvel Unlimited subreddit](https://www.reddit.com
 
 > This is the best thing I've ever seen on Reddit.
 
-It was nice to develop something that others found useful! One of the best things about knowing how to code is being able to create something solving a niche problem that wouldn't otherwise get addressed.
+It was nice to develop something that others found useful! One of the best things about knowing how to code is being able to create something solving a niche problem that wouldn't otherwise get addressed. These comments also show that SvelteKit provides a speedy user experience as well as a great dev experience.
 
 As a dev myself, I know as well as anyone that rewriting a product with an existing user base is hard. I'm not trying to disparage the development team as part of this effort&mdash;I just wanted to restore a feature that I (and many others) found essential, and try out some new dev tools in the process.
 
