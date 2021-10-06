@@ -85,5 +85,5 @@ Svelte is now talked about as one of the "big 4" frameworks. At this point, we c
 - How Svelte compares to the virtual DOM (see also: [Virtual DOM is pure overhead](https://svelte.dev/blog/virtual-dom-is-pure-overhead))
 - The ideal use case for Svelte
 - Svelte's two-pronged approach to managing state
-- How templating works in svelte
+- How templating works in Svelte
 - Whether a React-specific DSL could help reduce its boilerplate (see also Rich's [tweet](https://twitter.com/Rich_Harris/status/1438502561942810625?s=20) on the subject)
