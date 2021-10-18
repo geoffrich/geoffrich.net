@@ -13,6 +13,7 @@ When I was first learning about Svelte, I was intrigued by this feature. However
 
 In this post I will answer a few questions:
 
+- Do frameworks make for less accessible sites?
 - Just how effective are Svelte's a11y warnings?
 - What won't they warn you about?
 - How could Svelte improve?
@@ -25,11 +26,9 @@ Yes, in an article about Svelte I'm starting off by talking about React. Bear wi
 >
 > &mdash; [Ryan Florence](https://twitter.com/ryanflorence/status/1095853086478761984?s=20)
 
-To paraphrase the [talk of the same name](https://www.youtube.com/watch?v=orq9XnHGTgQ) by Ryan Florence, websites have gotten less accessible since jQuery was in its prime. In the jQuery days, no one built their own custom complex UI components because it was too hard. Instead, everyone used these battle-tested jQuery UI components that happened to be accessible because they were so widely used. But since React made building custom components easy, many people started writing their own custom components without being aware of what they need to do to make these components accessible.
+The [Curse of React](https://www.youtube.com/watch?v=orq9XnHGTgQ) is that the average React app is _less_ accessible than the average jQuery app. This is because React simplified building UI to the point that developers write their own complex UI components instead of using a standard library like jQuery UI. However, the average developer doesn't know everything that's needed to make something like an autocomplete accessible, resulting in less accessible components.
 
-Because of this, the curse of React is that the average React app is _less_ accessible than the average jQuery app. And at this point, the Curse of React is really the curse of frameworks in general (including Svelte), since they all simplified building complex UI.
-
-Since Svelte is a developing ecosystem, it suffers even more from the Curse of React. There aren't a lot of options for Svelte component libraries, let alone accessible ones. And because React is still the biggest framework, the best thinkers in accessibility are focusing on that ecosystem (e.g. [React ARIA](https://react-spectrum.adobe.com/react-aria/), [Downshift](https://www.downshift-js.com/), and others.)
+This curse isn't unique to React&mdash;at this point, the Curse of React is really the curse of UI frameworks in general, including Svelte. Since Svelte is still a developing ecosystem, it suffers even more from the Curse of React. There aren't a lot of options for Svelte component libraries, let alone accessible ones. And because React is still the biggest framework, the best thinkers in accessibility are focusing on that ecosystem (e.g. [React ARIA](https://react-spectrum.adobe.com/react-aria/), [Downshift](https://www.downshift-js.com/), and others).
 
 > I hesitated to mention this last point because it technically has to do with adoption, but I cannot separate it from React's merits: it seems to have the best thinkers on accessibility and interaction design right now. No other ecosystem has projects like Adobe and Devon Govett's React Aria that has extensively thought through and tested for WAI-ARIA so you don't have to. Ditto Segun Adebayo's Chakra UI.
 >
@@ -77,7 +76,7 @@ I will focus on issues that aren't detected because they're difficult or impossi
 
 ### Dynamic values
 
-The the value of an attribute is dynamic, the compiler can't be sure what will be placed in that attribute at runtime and will not validate that value.
+If the value of an attribute is dynamic, the compiler can't be sure what will be placed in that attribute at runtime and will not validate that value.
 
 For example, the compiler warns you if you write `<a href="#">`. But if you make a variable that stores `"#"` and set href to that variable, the compiler won't warn you. This also applies if the value of that attribute is a component prop.
 
@@ -89,7 +88,7 @@ For example, the compiler warns you if you write `<a href="#">`. But if you make
 <a href={href}>I'm under the radar</a>
 ```
 
-The reason this isn't a warning is because it's hard for the compiler to determine all the possible values for that variable at compilation time, especially if that variable is populated by an external API response. It doesn't know if the value of that attribute is an accessibility issue or not.
+This isn't a warning because it's hard for the compiler to determine all the possible values for that variable at compilation time, especially if that variable is populated by an external API response. It can't know if the value of that attribute is an accessibility issue or not.
 
 This limitation is true for any attribute that the compiler would normally warn you about.
 
@@ -125,9 +124,9 @@ For example, you shouldn't [skip heading levels](https://www.w3.org/WAI/tutorial
 </Heading4>
 ```
 
-Similarly, [duplicate IDs](https://dequeuniversity.com/rules/axe/3.5/duplicate-id) can be an accessibility issue. For instance, if two inputs have the same ID, the browser won't know which label goes with which input. However, if you use the same ID in two different Svelte components, the compiler won't be able to determine if that's an issue. Even if it was looking for duplicate IDs, it doesn't know if those two components are ever rendered at the same time.
+Similarly, [duplicate IDs](https://dequeuniversity.com/rules/axe/3.5/duplicate-id) can be an accessibility issue. If two inputs have the same ID, the browser won't know which label goes with which input. However, if you use the same ID in two different Svelte components, the compiler won't be able to determine if that's an issue. Even if it was looking for duplicate IDs, it doesn't know if those two components are ever rendered at the same time.
 
-Even warnings the Svelte compiler does have, like [labels must be linked to an input](https://svelte.dev/docs#a11y-label-has-associated-control), aren't perfect and have blind spots. With the way this warning is currently implemented, Svelte only requires the label to have a `for` attribute or to wrap an input. It doesn't require the input to be associated with a label, or even for an input with the corresponding `id` to exist.
+Even warnings the Svelte compiler does have, like [labels must be linked to an input](https://svelte.dev/docs#a11y-label-has-associated-control), aren't perfect and have blind spots. With the way this warning is currently implemented, Svelte only requires the label to have a `for` attribute or to wrap an input. It doesn't require an input with the matching `id` to exist or for the input to be associated with a label.
 
 ```svelte
 <!-- This passes, even if there is no input with id="test" -->
@@ -139,7 +138,7 @@ Even warnings the Svelte compiler does have, like [labels must be linked to an i
 
 This is because it's very hard for the compiler to be certain that there is an accessibility issue here. In the first case, there could be an input with `id="test"` _somewhere_, be that another component or even outside the Svelte app entirely. The second case with the standalone input could be easier to detect, but any implementation would likely introduce false positives, where the compiler reports an accessibility issue that is not there.
 
-This is one of the central conundrums of the Svelte compiler's accessibility checks: finding the balance between false positives and false negatives. Currently, the compiler has to optimize for _false negatives_, or not reporting accessibility issues that are present, so that we minimize the number of _false positives_. If there are too many false positives, people stop trusting the accessibility warnings.
+This is one of the central conundrums of the Svelte compiler's accessibility checks: finding the balance between false positives and false negatives. Tbe compiler optimizes for _false negatives_, or not reporting accessibility issues that are present, so that the number of _false positives_ is minimized. If there are too many false positives, people stop trusting the accessibility warnings. However, this means there are many potential accessibility issues that the compiler will not detect.
 
 ### Styling issues
 
@@ -163,7 +162,7 @@ Accessibility can't be reduced to a series of compiler warnings. So much about a
 
 Those are some of the issues the compiler is unlikely to warn you about anytime soon. And I don't think we should expect it to. There are limitations to being a compiler, and many of these issues are much easier to check in the browser using another automated tool or though manual testing.
 
-And honestly, there are limits to automated accessibility checks. In general, passing some sort of automated accessibility check is **not** a guarantee that your page is accessible, the Svelte compiler included. For more on this, I recommend ["What we found when we tested tools on the world’s least-accessible webpage"](https://accessibility.blog.gov.uk/2017/02/24/what-we-found-when-we-tested-tools-on-the-worlds-least-accessible-webpage/) and ["Building the most inaccessible site possible with a perfect Lighthouse score."](https://www.matuzo.at/blog/building-the-most-inaccessible-site-possible-with-a-perfect-lighthouse-score/)
+And honestly, there are limits to automated accessibility checks. In general, passing some sort of automated accessibility check is **not** a guarantee that your page is accessible, the Svelte compiler included. For more on this, I recommend ["What we found when we tested tools on the world’s least-accessible webpage"](https://accessibility.blog.gov.uk/2017/02/24/what-we-found-when-we-tested-tools-on-the-worlds-least-accessible-webpage/) and ["Building the most inaccessible site possible with a perfect Lighthouse score."](https://www.matuzo.at/blog/building-the-most-inaccessible-site-possible-with-a-perfect-lighthouse-score/) As developers, we can't pass the responsibility of making our sites accessible to an automated tool.
 
 The question is: do Svelte developers understand these limitations exist?
 
@@ -182,14 +181,14 @@ I put a [poll on Twitter](https://twitter.com/geoffrich_/status/1381999698643275
 >
 > &mdash; [@geoffrich\_](https://twitter.com/geoffrich_/status/1381999698643275777) on April 13, 2021
 
-You can't really quantify a11y compliance with percentages&mdash;calling your app "80% accessible" is nonsensical. But I wanted to understand people's confidence. If I'm building my app in Svelte and I know Svelte has accessibility warnings, what do I think seeing no accessibility warnings means? And the results were surprising:
+You can't really quantify a11y compliance with percentages&mdash;calling your app "80% accessible" is nonsensical. But I wanted to understand people's confidence. If you're building your app in Svelte and you know Svelte has accessibility warnings, what do you think seeing no accessibility warnings means? And the results were surprising:
 
 1. Most (28.5% of respondents)
 2. Some (26.3%)
 3. All a11y issues (24%)
 4. Many (21.2%)
 
-Out of 300 respondents, over half (52%) thought Svelte would catch most or all a11y issues. Almost a quarter thought Svelte would catch all of them. And I don't think that's a correct perception. With all the examples above, it's clear that there's so much more to accessibility that Svelte won't warn you about.
+Out of 300 respondents, over half (52%) thought Svelte would catch most or all a11y issues. Almost a quarter thought Svelte would catch all of them. And I don't think that's a correct perception. With my examples above, it's clear that there's so much more to accessibility that Svelte won't warn you about.
 
 Even beyond Svelte, automated accessibility checkers don't catch every issue. According to a11y experts WebAIM, only [25%-35% of accessibility errors](https://webaim.org/projects/million/#method) are detectable using any automated tooling, and the Svelte compiler is a subset of that. You're mistaken if you think using Svelte will mean you're warned about any accessibility issue.
 
@@ -203,7 +202,7 @@ Developers will always have to do something to make sure what they build is acce
 
 A lot of the existing a11y warnings have been slow to implement because Svelte has to re-implement work already done in the [JSX eslint](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) plugin or in [axe-core](https://github.com/dequelabs/axe-core). Is there a way to use existing packages in the Svelte compiler to detect a11y issues? Building a compiler is hard enough, let alone keeping up to date with accessibility guidance.
 
-Also, with [SvelteKit](https://kit.svelte.dev/), we now know how someone will be building their Svelte app. There could be a way to integrate runtime accessibility checks into the default template. Adding runtime checks would massively increase the kinds of issues Svelte could detect. I put in a [SvelteKit issue](https://github.com/sveltejs/kit/issues/1265) suggesting that.
+Also, with [SvelteKit](https://kit.svelte.dev/), we now know how someone will be building their Svelte app. There could be a way to integrate runtime accessibility checks into the default template. Adding these checks would massively increase the kinds of issues Svelte could detect. I put in a [SvelteKit issue](https://github.com/sveltejs/kit/issues/1265) suggesting that.
 
 ### Merge existing PRs
 
@@ -219,11 +218,11 @@ There are quite a few a11y warning PRs open. Merging these PRs would improve Sve
 
 ### Documentation
 
-I also think Svelte could improve its documentation around accessibility. Currently, it only lists the available [accessibility warnings](https://svelte.dev/docs#a11y-label-has-associated-control). [React](https://reactjs.org/docs/accessibility.html), [Vue](https://v3.vuejs.org/guide/a11y-basics.html), and [Angular](https://angular.io/guide/accessibility) all have dedicated accessibility sections in their docs that detail various considerations, practices, and testing around accessibility. Svelte could do the same, or at least link out to further resources.
+I also think Svelte could improve its documentation around accessibility. Currently, it only lists the available [accessibility warnings](https://svelte.dev/docs#a11y-label-has-associated-control). [React](https://reactjs.org/docs/accessibility.html), [Vue](https://v3.vuejs.org/guide/a11y-basics.html), and [Angular](https://angular.io/guide/accessibility) all have dedicated accessibility sections in their docs that detail various considerations, practices, and testing around accessibility. Svelte could do the same, or at least link out to further resources. This would help developers better understand what they're responsible for.
 
 ### Foster a culture of accessibility
 
-This isn't necessarily on Svelte itself, but on the community. As Svelte developers and content creators, we should take care to make sure what we put out there is accessible, whether that's a blog post, a video, sharing a REPL, or creating a package.
+This isn't necessarily on Svelte itself, but on the community. As Svelte developers and content creators, we should take care to make sure what we put out there is accessible, whether that's a blog post, a video, sharing a REPL, or creating a package. Sharing inaccessible demos (for example, a demo that uses `<div on:click>` instead of `<button>`) results in people copying that code for their projects and excluding some of their users. We can do better.
 
 ## Wrapping up
 
@@ -249,3 +248,5 @@ I'll link some introductory a11y resources down below, and feel free to reach ou
 - [Smashing Magazine](https://www.smashingmagazine.com/2021/03/complete-guide-accessible-front-end-components/)
 - [Accessibility Developer Guide](https://www.accessibility-developer-guide.com/)
 - [A11ycasts with Rob Dodson](https://www.youtube.com/playlist?list=PLNYkxOF6rcICWx0C9LVWWVqvHlYJyqw7g)
+
+_Thanks to [swyx](https://www.swyx.io/) for discussing these ideas with me back when this was a rejected Svelte Summit talk._
