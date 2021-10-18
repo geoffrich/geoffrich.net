@@ -4,7 +4,7 @@ date: '2021-10-18'
 tags:
   - a11y
   - svelte
-socialImage: ''
+socialImage: 'https://geoffrich.net/images/social/svelte-a11y-limits.png'
 ---
 
 Svelte's accessibility (often shortened to "a11y") warnings are one of the framework's standout features. Per [Rich Harris](https://twitter.com/rich_harris/status/1008856270084898816), Svelte is an "a11y-first framework" that "will _let_ you write non-accessible markup, but it won't respect you for it." Accessibility warnings in the compiler have been a part of the framework [since version 1.38](https://github.com/sveltejs/svelte/issues/374), and are highlighted in the [first section](https://svelte.dev/tutorial/dynamic-attributes) of the tutorial.
