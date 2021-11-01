@@ -1,5 +1,5 @@
 ---
-title: Will Svelte make my app accessible?
+title: What Svelte's accessibility warnings won't tell you
 date: '2021-10-18'
 tags:
   - a11y
