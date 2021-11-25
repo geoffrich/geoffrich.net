@@ -5,9 +5,18 @@ tags:
   - svelte
   - a11y
 socialImage: 'https://geoffrich.net/images/social/svelte-summit-2021.png'
+templateEngineOverride: njk,md
 ---
 
-Following is a transcript of my lightning talk "Svelte Transitions and Accessibility" at the Fall 2021 [Svelte Summit](https://sveltesummit.com/). You can find my [slide deck](https://docs.google.com/presentation/d/1djta1tNkYdN7B287S3U9Stfo0L8q0lfgsVQGUKBu2N4/edit?usp=sharing) on Google Slides and the [example code](https://github.com/geoffrich/svelte-summit-accessible-transitions) on my GitHub. The whole event will be available to stream on [YouTube](https://youtu.be/1Df-9EKvZr0).
+{% set videoTitle = "Geoff Rich - Svelte Transitions and Accessibility" %}
+{% set videoId = "iceNAO8c4J4" %}
+{% include 'partials/components/youtube.njk' %}
+
+I spoke at the Fall 2021 [Svelte Summit](https://sveltesummit.com/) on Svelte Transitions and Accessibility. Svelte includes built-in animations that makes it easy to slide, scale, and fly elements in and out of the DOM. However, you need to be careful to not trigger motion sickness in your users. In my talk, I go over which Svelte transitions could cause accessibility issues and how to respect user motion preferences when using them.
+
+We iteratively build a solution to change which transition we use when the user requests reduced motion -- first only using CSS, then detecting the user's motion preference in a Svelte component, to finally encapsulating the logic in a reusable Svelte store.
+
+Following is a transcript of the talk. You can find my [slide deck](https://docs.google.com/presentation/d/1djta1tNkYdN7B287S3U9Stfo0L8q0lfgsVQGUKBu2N4/edit?usp=sharing) on Google Slides and the [example code](https://github.com/geoffrich/svelte-summit-accessible-transitions) on my GitHub. The entire event is available to stream on [YouTube](https://youtube.com/playlist?list=PL8bMgX1kyZTg2bI9IOMgfBc8lrU3v2itt).
 
 Huge shout-out to the organizers for putting on such a great event and for featuring my talk! Special thanks to Kevin for being very quick to respond to my questions via email, and to Shawn (a.k.a. swyx) for hosting a speaker prep session with some very helpful tips.
 

@@ -38,6 +38,7 @@ module.exports = function(config) {
   config.addPassthroughCopy('src/admin/previews.js');
   config.addPassthroughCopy('node_modules/nunjucks/browser/nunjucks-slim.js');
   config.addPassthroughCopy('node_modules/focus-visible/dist/focus-visible.min.js');
+  config.addPassthroughCopy('node_modules/lite-youtube-embed/src/lite-yt-embed.js');
   config.addPassthroughCopy('src/robots.txt');
 
   config.addWatchTarget('src/_includes/assets/css');
