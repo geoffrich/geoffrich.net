@@ -8,6 +8,8 @@ tags:
 socialImage: 'https://geoffrich.net/images/social/accessible-svelte-transitions.png'
 ---
 
+**Update 11/2021:** this post was adapted into a lightning talk I recorded for the [Fall 2021 Svelte Summit.](/posts/svelte-summit-2021/)
+
 Svelte's built-in [transition](https://svelte.dev/tutorial/transition) functionality makes it easy to animate elements as they are added to and removed from the DOM. It's as simple as adding a `transition:` directive to an element and passing one of the built-in transition functions.
 
 However, we need to be mindful of accessibility issues around animation. Some transitions could trigger motion sickness for those with motion sensitivities. I will go over which Svelte transitions could cause accessibility issues and how to remove or replace them based on the user's preference.
