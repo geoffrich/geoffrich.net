@@ -48,7 +48,7 @@ But what if you want to use this code in multiple components? You may have thoug
 // interval.js
 import {onMount} from 'svelte';
 
-export function useInterval(fn) {
+export function onInterval(fn) {
   onMount(() => {
     const interval = setInterval(fn, 1000);
     return () => clearInterval(interval);
@@ -58,10 +58,10 @@ export function useInterval(fn) {
 
 ```svelte
 <script>
-  import {useInterval} from './interval.js';
+  import {onInterval} from './interval.js';
 
   let count = 0;
-  useInterval(() => (count += 1));
+  onInterval(() => (count += 1));
 </script>
 
 <p>
