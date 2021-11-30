@@ -151,7 +151,7 @@ export default function trackUpdateCount() {
 }
 ```
 
-And it can be used like so, without needing to add any lifecycle boilerplate to the component intself:
+And it can be used like so, without needing to add any lifecycle boilerplate to the component itself:
 
 ```svelte
 <!-- Input.svelte -->
