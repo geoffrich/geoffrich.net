@@ -14,6 +14,9 @@
                 <a href="{{item.url}}" class="post-list__link">{{ item.data.title }}</a>
                 {% endif %}
               </h3>
+              {%if item.data.metaDesc %}
+              <p class="text-500 gap-top-300">{{ item.data.metaDesc }}</p>
+              {% endif %}
               <p class="text-500 gap-top-300 weight-mid">
                 <time datetime="{{ item.date | w3DateFilter }}">{{ item.date | dateFilter }}</time>
                 {% if isExternal %}
