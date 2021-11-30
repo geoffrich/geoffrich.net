@@ -117,7 +117,11 @@
       display: block;
       background: var(--color-dark);
       padding: get-size(700);
-      font-size: get-size(500);
+      font-size: get-size('base');
+
+      @include media-query('sm') {
+        font-size: get-size(500);
+      }
     }
   }
 
