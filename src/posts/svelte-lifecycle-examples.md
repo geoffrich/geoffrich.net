@@ -158,7 +158,7 @@ And it can be used like so, without needing to add any lifecycle boilerplate to 
 <script>
   export let name = 'test';
 
-  import trackUpdateCountfrom './trackUpdateCount';
+  import trackUpdateCount from './trackUpdateCount';
   const count = trackUpdateCount();
 </script>
 
