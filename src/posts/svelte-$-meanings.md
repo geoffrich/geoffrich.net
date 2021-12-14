@@ -80,7 +80,9 @@ You won't need to use this very often, but it's useful to know about.
 
 ## Accessing store values
 
-The other primary use of `$` you'll see in a Svelte component is when referencing the current value of a store. In Svelte, a [store](https://svelte.dev/tutorial/writable-stores) is any object with a `subscribe` method that allows you to be notified when the value of the store changes. If you wanted to get the current value of a store in a Svelte component and have it automatically update when the store changes, you could do something like the following.
+The other primary use of `$` you'll see in a Svelte component is when referencing the current value of a store. In Svelte, a [store](https://svelte.dev/tutorial/writable-stores) is any object with a `subscribe` method that allows you to be notified when the value of the store changes. It's especially useful when you want a reactive value to be accessible from muliple components in your application, since the store can live outside of a Svelte component.
+
+If you wanted to get the current value of a store in a Svelte component and have it automatically update when the store changes, you could do something like the following.
 
 ```svelte
 <script>
@@ -102,7 +104,28 @@ Thankfully, Svelte has a special syntax to make this sort of thing easy. Inside 
 
 As with reactive declarations, this syntax only works inside a Svelte component. In regular JS files, you'll need to subscribe to the store manually.
 
+### Comparing reactive statements and reactive stores
+
 Those are the two primary ways `$` is used inside Svelte. If the dollar sign has a colon after it (`$:`), then it indicates a [reactive statement](https://svelte.dev/docs#3_$_marks_a_statement_as_reactive). If it is at the start of a variable name inside a Svelte component, then it's [accessing a reactive store value](https://svelte.dev/docs#4_Prefix_stores_with_$_to_access_their_values). In general, when you see `$` in a Svelte component, you should think _reactivity_.
+
+Note that there are often times where you'll want to combine the two. Referencing a store value in the `<script>` block with `$` does _not_ mean that value will automatically be updated when the store changes. In the following example, `doubledCount` will not be automatically updated unless you mark that assignment as reactive with `$:`.
+
+```svelte
+<script>
+	// count is a store
+	import count from './count';
+
+	// doesn't keep value updated
+	let doubledCount = $count * 2;
+
+	// keeps value updated
+	$: doubledCount = $count * 2;
+</script>
+```
+
+This could seem unintuitive &mdash; didn't I just say that a store is reactive? Yes, but it's only reactive in that _we can be notified any time the value changes_. If we want to derive a value from it, we still need to mark that statement as reactive as well.
+
+This is a little difficult to wrap your head around, so see this alternate explanation in [r/sveltejs](https://www.reddit.com/r/sveltejs/comments/r6j9r4/i_still_dont_get_this_and_need_an_eli5/hmy13ud/) if you're still having trouble.
 
 However, those are not the only times you'll see `$` in a Svelte component. `$` is used in other ways, both in Svelte and in vanilla JavaScript in general. Let's go over a few more examples.
 
