@@ -3,7 +3,7 @@ title: 4 tips for cleaner Svelte components
 date: '2022-04-04'
 tags:
   - svelte
-socialImage: 'https://geoffrich.net/images/social/local-constants.png'
+socialImage: 'https://geoffrich.net/images/social/clean-component-tips.png'
 ---
 
 I've helped a few devs at my company get started with Svelte, and I love seeing how easy it is for them to pick it up and start being productive. However, I've noticed a few areas where they write verbose code without realizing that Svelte has a cleaner way to do the same thing.
