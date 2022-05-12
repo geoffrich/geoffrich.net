@@ -1,38 +1,62 @@
 ---
 import '../styles/blog.css';
+import site from '../data/site.json';
 
 export interface Props {
 	title: string;
 	description: string;
-	permalink: string;
+	socialImage?: string;
 }
-const { title, description, permalink } = Astro.props;
+const { title, description, socialImage } = Astro.props;
+const siteTitle = site.name;
+const pageTitle = `${title} - ${siteTitle}`;
+const currentUrl = Astro.canonicalURL;
 ---
 
-<!-- Global Metadata -->
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width" />
-<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- TODO: RSS feed -->
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}/feed.xml" />
+  <!-- TODO: are these paths still right?-->
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
+  <link rel="alternate icon" href="/images/favicon.ico">
 
 <!-- Primary Meta Tags -->
-<title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
+<title>{pageTitle}</title>
+<link rel="canonical" href={currentUrl} />
 
-<!-- Open Graph / Facebook -->
+<meta property="og:site_name" content={siteTitle} />
+<meta property="og:title" content={pageTitle} />
 <meta property="og:type" content="website" />
-<meta property="og:url" content={permalink} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content="https://astro.build/social.jpg?v=1" />
+<meta property="og:url" content={currentUrl} />
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={permalink} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content="https://astro.build/social.jpg?v=1" />
+<meta name="twitter:creator" content={`@${site.authorHandle}`} />
+
+{description && (
+	<meta name="description" content={description} />
+	<meta name="twitter:description" content={description} />
+	<meta property="og:description" content={description} />
+)}
+
+{socialImage && (
+  <meta property="og:image" content={socialImage} />
+  <meta name="twitter:image" content={socialImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:image:alt" content={`Page image for ${siteTitle}`} />
+  <meta name="twitter:image:alt" content={`Page image for ${siteTitle}`} />	
+)}
 
 <!-- Fonts -->
-<link rel="preconnect" href="https://fonts.gstatic.com" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;700&display=swap" />
+<!-- TODO: copy other base head stuff in here -->
+<!--<link rel="preconnect" href="https://fonts.gstatic.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;700&display=swap" />-->
+
+  <script>
+    document.documentElement.classList.remove('no-js'); 
+    localStorage.getItem('theme') && document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
+    localStorage.getItem('user-color-scheme') && document.documentElement.setAttribute('data-user-color-scheme', localStorage.getItem('user-color-scheme'));
+  </script>
+
+<!-- TODO 
+<style>{% include "assets/css/global.css" %}</style>-->

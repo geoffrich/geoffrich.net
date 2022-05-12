@@ -1,0 +1,27 @@
+---
+import SiteFooter from '../components/SiteFooter.svelte';
+import SiteHeader from '../components/SiteHeader.svelte';
+---
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <slot name="head"></slot>
+</head>
+<body>
+  <SiteHeader />
+  <slot></slot>
+  <SiteFooter />
+
+  <!-- TODO <script src="/node_modules/focus-visible/dist/focus-visible.min.js"></script>-->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  </script>
+  <script data-goatcounter="https://grich.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
