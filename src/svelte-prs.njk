@@ -1,0 +1,30 @@
+---
+title: Svelte PRs
+---
+
+{% extends 'layouts/base.njk' %}
+{# Intro content #}
+{% set introHeading %}List of Svelte PRs{% endset %}
+{% set introHeadingLevel = '2' %}
+{# Post list content #}
+{% block content %}
+  <main id="main-content" tabindex="-1">
+    {% include "partials/components/intro.njk" %}
+    <section class="[ post-list ] [ pad-top-700 gap-bottom-900 ]">
+      <div class="[ inner-wrapper ] [ sf-flow ]">
+        <ul class="[ post-list__items ] [ sf-flow ] [ pad-top-300 ]">
+          {% for item in github.prs %}
+            <li class="post-list__item">
+              <h3 class="font-base leading-tight text-600 weight-mid">
+                <a href="{{ item.url }}" class="post-list__link">{{ item.title }} ({{ item.repository_url.replace('https://api.github.com/repos/', '') }})</a>
+              </h3>
+              <p class="text-500 gap-top-300 weight-mid">
+                <time datetime="{{ item.created_at | w3DateFilter }}">{{ item.created_at | dateFilter }}</time>
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+  </main>
+{% endblock %}
