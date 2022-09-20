@@ -1,9 +1,10 @@
 ---
-title: Native Page Transitions in SvelteKit (Svelte London August 2022)
+title: Svelte London August 2022
 date: '2022-08-23'
 tags:
   - svelte
 templateEngineOverride: njk,md
+metaDesc: 'My meetup talk on native page transitions in SvelteKit.'
 ---
 
 {% set videoTitle = "Svelte London - August Meetup" %}

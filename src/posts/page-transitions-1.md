@@ -38,7 +38,7 @@ Behind the scenes, the browser does something really clever. When the transition
 
 We’ll get into more detail about how to interact with this API later in the post, but see the excellent [official explainer](https://developer.chrome.com/blog/shared-element-transitions-for-spas/) for much more detail.
 
-So, how do we translate this to code that will work in SvelteKit?
+So, how do we get this to work in SvelteKit?
 
 ## Implementing in SvelteKit
 
@@ -130,7 +130,7 @@ This isn’t that much code, and you won’t have to interact with it directly. 
 
 ## In a SvelteKit App
 
-Okay, let’s write some page transitions! If you want to follow along, clone the `initial` branch of [this repo](https://github.com/geoffrich/sveltekit-shared-element-transitions/tree/initial), which is the demo we’ll be working off of today. It’s based off a [codelab](https://codelabs.developers.google.com/create-an-instant-and-seamless-web-app#5) from the Chrome team, which I re-wrote using SvelteKit. You’ll also need the latest Chrome with the `chrome://flags/#document-transition` flag enabled. This demo also happens to use Tailwind, since the codelab I forked included it, though I took it out of the code samples for brevity's sake.
+Okay, let’s write some page transitions! If you want to follow along, clone the `initial` branch of [this repo](https://github.com/geoffrich/sveltekit-shared-element-transitions/tree/initial), which is the demo we’ll be working off of today. It’s based off a [codelab](https://codelabs.developers.google.com/create-an-instant-and-seamless-web-app#5) from the Chrome team, which I re-wrote using SvelteKit. You’ll also need the latest Chrome with the `chrome://flags/#document-transition` flag enabled. This demo also happens to use Tailwind since the codelab I forked included it, though I took it out of the code samples in this post for brevity's sake.
 
 For a preview of what we’re building, check out the [deployed demo](https://sveltekit-shared-element-transitions-codelab.vercel.app/) (again, only works in latest Chrome with a flag).
 
@@ -202,9 +202,9 @@ However, my favorite aspect of this API uses a new CSS property: `page-transitio
 
 ## Animating an element from one page to the next
 
-Okay, now let's implement something a little more app-like. The fruit images on the list and the details pages are conceptually the _same element_. They just happen to be represented by different HTML elements and appear on different pages. To make that relationship clear, we could animate the image on the list page to the position of the image on the details page the user is navigating to. This is a little hard to explain in text, so skip to the end to watch a video of the final interaction if you're more visual.
+Okay, now let's implement something a little more app-like. The fruit images on the list and the details pages are conceptually the _same element_. They just happen to be represented by different HTML elements and appear on different pages. To make that relationship clear, we could animate the image on the list page to the position of the image on the details page the user is navigating to. This is a little hard to explain in text, so skip to the end to watch a video of the final result if you want.
 
-This is something that would've been tricky to do with current browser APIs. However, the shared element transition API makes this possible even though they’re different elements. To do this, we need to add a `page-transition-tag` to each element. The browser will animate elements with the same `page-transition-tag` from its position on the old page to its position on the new page.
+This is something that would've been tricky to do with current browser APIs, but the shared element transition API makes this possible. To do this, we need to add a `page-transition-tag` to each element. The browser will animate elements with the same `page-transition-tag` from their position on the old page to their position on the new page.
 
 First, go to `src/lib/Icon.svelte`. This is the component with the fruit image on the list page. Add a CSS rule targeting the image.
 
@@ -376,7 +376,7 @@ Here’s what the final product looks like.
 
 Now we have this slick transition and we had to write very little code &mdash; the browser does the heavy lifting!
 
-You can reduce some of the duplication by adding a rule to the global styles targetting elements that set the `--tag` variable. In your `app.css`, write the following:
+You can reduce some of the duplication by adding a rule to the global styles that targets elements with the `--tag` variable set. In your `app.css`, write the following:
 
 ```css
 /* Whenever the style attribute includes "--tag" */
