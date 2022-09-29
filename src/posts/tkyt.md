@@ -4,6 +4,7 @@ date: '2022-09-29'
 tags:
   - svelte
   - speaking
+socialImage: 'https://geoffrich.net/images/social/tkyt.png'
 templateEngineOverride: njk,md
 ---
 
