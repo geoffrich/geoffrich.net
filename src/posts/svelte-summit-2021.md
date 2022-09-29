@@ -4,6 +4,7 @@ date: '2021-11-20'
 tags:
   - svelte
   - a11y
+  - speaking
 socialImage: 'https://geoffrich.net/images/social/svelte-summit-2021.png'
 templateEngineOverride: njk,md
 ---
