@@ -191,11 +191,13 @@ I don't have to worry about selected options not present on the new page &mdash;
 
 I probably could have simplified the code in a similar way without forms, but "thinking in FormData" unlocked this simpler solution for me.
 
-# Submitting when no JS available
+## Submitting when no JS available
 
 Lastly, we automatically submit the form when JS is available, but what about when it's not? On the text input you can hit "Enter" to submit the form and reload the page, but this doesn't work well with the checkboxes &mdash; you would have to select a checkbox, focus the text input, and hit "Enter". This isn't a great experience. It would be much better if we had an actual submit button.
 
 However, I didn't want a submit button when JS is available, because it wouldn't do anything since the form is automatically submitted.
+
+**EDIT:** as pointed out by Jayphen [on Twitter](https://twitter.com/Jayphen/status/1615406708997689372), we can short-circuit the rest of the section by wrapping the button in a [noscript](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/noscript) tag. Leaving the rest as an alternate approach (and you could use the classes for more fine-grained control of what happens when JS is unavailable).
 
 One option would be to have a submit button on the page for the initial server render and then hide it using [onMount](https://svelte.dev/docs#run-time-svelte-onmount) or checking [browser](https://kit.svelte.dev/docs/modules#$app-environment-browser). Unfortunately, this could be jarring, since the submit button would render and then abruptly vanish when the page hydrates.
 
@@ -231,7 +233,7 @@ And then we can add a submit button like this, and it will only show when JS is 
 
 Like anything progressive enhancement, this is about tradeoffs. This won't have a FOMB (flash of misplaced button), but it will also hide the button when JS is enabled but not available yet (i.e. the page is hydrating).
 
-# Wrapping up
+## Wrapping up
 
 So that's how I spent my three-day-weekend &mdash; let me know if you have any feedback or suggestions!
 
