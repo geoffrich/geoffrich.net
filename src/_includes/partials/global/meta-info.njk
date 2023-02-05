@@ -33,9 +33,12 @@
   <meta property="og:image" content="{{ socialImage }}" />
   <meta name="twitter:image" content="{{ socialImage }}" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta property="og:image:alt" content="Page image for {{ site.name }}" />
-  <meta name="twitter:image:alt" content="Page image for {{ site.name }}" />
+{% else %}
+  <meta property="og:image" content="https://geoffrich.net/images/logo.png" />
+  <meta name="twitter:image" content="https://geoffrich.net/images/logo.png" />
 {% endif %}
+<meta property="og:image:alt" content="Page image for {{ site.name }}" />
+<meta name="twitter:image:alt" content="Page image for {{ site.name }}" />
 
 {% if site.paymentPointer %}
   <meta name="monetization" content="{{ site.paymentPointer }}" />
