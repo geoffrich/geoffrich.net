@@ -8,7 +8,8 @@
     {
       "text": "GitHub",
       "url": "https://github.com/geoffrich",
-      "external": true
+      "external": true,
+      "rel": "me"
     },
     {
       "text": "Contact Me",
