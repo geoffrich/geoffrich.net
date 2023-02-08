@@ -5,6 +5,9 @@ tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/style-directives.png'
 metaDesc: 'Writing more maintainable and optimized dynamic styles with the style directive.'
+syndication:
+  - https://twitter.com/geoffrich_/status/1488172725105352706
+  - https://www.reddit.com/r/sveltejs/comments/sh2qnc/how_to_use_sveltes_style_directive/
 ---
 
 Svelte 3.46 released a new feature: [style directives](https://svelte.dev/docs#template-syntax-element-directives-style-property)! In this post I'll show you how to use them and the advantages they have over setting the `style` attribute directly.

@@ -4,6 +4,9 @@ date: '2021-04-12'
 tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/svelte-tower-of-hanoi.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1381639075203936259
+  - https://www.reddit.com/r/sveltejs/comments/mph6l6/solving_the_tower_of_hanoi_with_svelteself/
 ---
 
 The [Tower of Hanoi](https://en.wikipedia.org/wiki/Tower_of_Hanoi) is a classic mathematical puzzle that is often used as an introduction to recursion. We can express a solution to this problem only using Svelte's template syntax.

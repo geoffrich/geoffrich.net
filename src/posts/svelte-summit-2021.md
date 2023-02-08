@@ -7,6 +7,8 @@ tags:
   - speaking
 socialImage: 'https://geoffrich.net/images/social/svelte-summit-2021.png'
 templateEngineOverride: njk,md
+syndication:
+  - https://twitter.com/geoffrich_/status/1465117283835998211
 ---
 
 {% set videoTitle = "Geoff Rich - Svelte Transitions and Accessibility" %}

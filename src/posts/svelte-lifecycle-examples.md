@@ -5,6 +5,9 @@ tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/svelte-lifecycle-examples.png'
 metaDesc: "Well, not exactly anywhere. But it's more than just inside components!"
+syndication:
+  - https://twitter.com/geoffrich_/status/1465724094536568834
+  - https://www.reddit.com/r/sveltejs/comments/r5rm5a/sveltes_lifecycle_methods_can_be_used_anywhere/
 ---
 
 I don't think it's widely known that you can call the Svelte lifecycle methods (onMount, onDestroy, beforeUpdate, afterUpdate) _outside_ of a component. It is mentioned in the [Svelte docs](https://svelte.dev/docs#onMount) and tutorial, though it's easy to gloss over.

@@ -5,6 +5,9 @@ tags:
   - svelte
   - css
 socialImage: 'https://geoffrich.net/images/social/svelte-scoped-styles.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1435256552710148099
+  - https://www.reddit.com/r/sveltejs/comments/pjpaz6/how_svelte_scopes_component_styles/
 ---
 
 By default, any styles you write in a Svelte component are scoped to that component. This means that the `p` selector in the following code will only apply to `<p>` elements inside this component.

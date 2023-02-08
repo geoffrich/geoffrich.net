@@ -5,6 +5,9 @@ tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/assorted-svelte-demos.png'
 metaDesc: 'Conditional wrappers, native page transitions, an action to detect focus leaving, and a recursive action.'
+syndication:
+  - https://twitter.com/geoffrich_/status/1544729033664909313
+  - https://www.reddit.com/r/sveltejs/comments/vsvgb8/some_assorted_svelte_demos_conditional_wrappers/
 ---
 
 Over the past couple months I’ve been posting some Svelte demos to Twitter. I’ve been meaning to turn some of them into full blog posts, but I’ve been quite busy so that hasn’t happened yet.

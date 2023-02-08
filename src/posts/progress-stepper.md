@@ -7,6 +7,8 @@ tags:
   - html
   - css
   - js
+syndication:
+  - https://twitter.com/geoffrich_/status/1317695879201968128
 ---
 
 I had a great time solving [the latest challenge](https://piccalil.li/blog/challenge-008-progress-stepper/) from Andy Bell's Front-End Challenges Club! I'm looking forward to see how he implemented it, but [here's my solution ](/demos/front-end-cc-008/) and some notes on my approach.

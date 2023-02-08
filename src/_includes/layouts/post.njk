@@ -28,6 +28,13 @@
             <p>Next Blog Post: <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a></p>
           {% endif %}
         </div>
+        {% if syndication %}
+        <div style="display: none">
+          {% for item in syndication %}
+            <a rel="syndication" href="{{ item }}">{{ item.split('://')[1].split('/')[0] }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
       {% if tags %}
         <footer class="[ post__footer ] [ pad-top-500 pad-bottom-500 ]">

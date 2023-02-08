@@ -4,6 +4,9 @@ date: '2023-01-09'
 tags:
   - game music
 socialImage: 'https://geoffrich.net/images/social/game-music-2022.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1612544876725571585
+  - https://front-end.social/@geoffrich/109661104652276462
 ---
 
 We'll get back to our regularly-scheduled webdev posts soon (🤞), but first I wanted to post about a non-dev side project I've been working on: a giant playlist surveying the video game music releases of 2022! This was very much inspired by the exhaustive [Fluxblog](http://www.fluxblog.org/) survey playlists for pop music, though I didn't pay any attention to the sequencing of tracks.

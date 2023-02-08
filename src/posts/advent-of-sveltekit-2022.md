@@ -6,6 +6,10 @@ tags:
   - sveltekit
 socialImage: 'https://geoffrich.net/images/social/advent-of-sveltekit-2022.png'
 metaDesc: 'Applying forms and progressive enhancement to daily holiday UI challenges.'
+syndication:
+  - https://twitter.com/geoffrich_/status/1620087348456464384
+  - https://www.reddit.com/r/sveltejs/comments/10p5c5g/advent_of_sveltekit_2022_my_favorite_demos_geoff/
+  - https://front-end.social/@geoffrich/109778941383700334
 ---
 
 Throughout December (and part of January) I did [Advent of SvelteKit 2022](https://advent-of-sveltekit-2022.vercel.app/), where I took the [Advent of Vue](https://github.com/Advent-Of-Vue) challenges and did them in SvelteKit. Not satisfied with simply recreating the challenge in vanilla Svelte, I had a few extra goals for my solutions:

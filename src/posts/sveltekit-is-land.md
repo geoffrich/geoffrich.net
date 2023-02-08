@@ -5,6 +5,8 @@ tags:
   - sveltekit
   - side project
 socialImage: 'https://geoffrich.net/images/social/sveltekit-is-land.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1579483417473081345
 ---
 
 My webdev project last weekend: I got partial hydration working in a SvelteKit site using the `<is-land>` custom element from [Eleventy](https://www.11ty.dev/docs/plugins/partial-hydration/)! This means it's possible to only download JS for specific components instead of the whole page. Here's what the integration currently looks like:

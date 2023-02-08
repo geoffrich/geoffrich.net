@@ -5,6 +5,8 @@ tags:
   - svelte
   - podcast
 socialImage: 'https://geoffrich.net/images/social/20minjs.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1514278257155198976
 ---
 
 I recently had my first podcast appearance on [20minJS](https://podcast.20minjs.com), where I discussed Svelte and getting into open source with Fernando Doglio. I thought it was a great conversation and really appreciated the opportunity!

@@ -4,6 +4,8 @@ date: '2021-10-05'
 tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/rich-harris-podrocket.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1445427081026801670
 ---
 
 LogRocket's podcast [PodRocket](https://podrocket.logrocket.com/) released a [new episode](https://podrocket.logrocket.com/rich-harris) with Rich Harris, the creator of [Svelte](https://svelte.dev/), this morning. There were so many good insights in it that I wanted to pull out some choice quotes and take some notes to share this in a non-audio medium.

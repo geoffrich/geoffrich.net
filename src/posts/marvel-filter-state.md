@@ -7,6 +7,10 @@ tags:
   - sveltekit
 socialImage: 'https://geoffrich.net/images/social/marvel-filter-state.png'
 metaDesc: Using SvelteKit, form.requestSubmit, and Zod to build a robust Marvel Comics search experience.
+syndication:
+  - https://twitter.com/geoffrich_/status/1615370891898281987
+  - https://www.reddit.com/r/sveltejs/comments/10ef8aw/progressively_enhancing_a_sveltekit_search_form/
+  - https://front-end.social/@geoffrich/109705282447799660
 ---
 
 Marvel Unlimited By Year (a.k.a. MUBY) is a [site I built](/posts/marvel-unlimited-by-year/) to browse Marvel comics by release year. For example, this is [all the comics released in 1982](https://marvel.geoffrich.net/year/1982) that you can read on Marvel Unlimited. Each page has a set of inputs that let you filter which comics are shown. You can filter issues by title, release month, series, creator, and event, and sort them in various orders.

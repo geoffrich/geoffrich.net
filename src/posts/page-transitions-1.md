@@ -7,6 +7,9 @@ tags:
 socialImage: 'https://geoffrich.net/images/social/page-transitions-1.png'
 metaDesc: 'Taking the experimental shared element transition API for a spin.'
 templateEngineOverride: njk,md
+syndication:
+  - https://twitter.com/geoffrich_/status/1572225315065036800
+  - https://www.reddit.com/r/sveltejs/comments/xj9fd6/native_page_transitions_in_sveltekit_part_1_geoff/
 ---
 
 Chrome is currently experimenting with a new API that will let you easily animate between two different pages, which is a long-desired feature in browsers.

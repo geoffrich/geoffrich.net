@@ -4,6 +4,10 @@ date: '2022-11-20'
 tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/tic-tac-toe.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1594720162254843905
+  - https://www.reddit.com/r/sveltejs/comments/z11kwl/building_tictactoe_with_svelte_geoff_rich/
+  - https://front-end.social/@geoffrich/109382607544878910
 ---
 
 I recently came across [Advent of Vue](https://adventofvue.com/), which looks like they'll have some fun front-end challenges for December. While they're Vue-focused, I assume any front-end tech should work. I'll be attempting them with Svelte & SvelteKit.

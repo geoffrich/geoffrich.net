@@ -5,6 +5,9 @@ tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/style-prop-defaults.png'
 metaDesc: 'A few techniques for giving Svelte style props a default value.'
+syndication:
+  - https://twitter.com/geoffrich_/status/1518977568178810882
+  - https://www.reddit.com/r/sveltejs/comments/ucfjbx/svelte_quick_tip_style_prop_defaults/
 ---
 
 Svelte has a built-in solution for component theming using [style props](https://svelte.dev/docs#template-syntax-component-directives---style-props). So, you can use [CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) in your component styles...

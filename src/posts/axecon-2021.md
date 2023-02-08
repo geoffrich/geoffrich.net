@@ -5,6 +5,8 @@ tags:
   - a11y
   - conference
 socialImage: 'https://geoffrich.net/images/social/axecon-2021.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1376569632014790666
 ---
 
 I recently had the pleasure of attending Deque's [axe-con](https://www.deque.com/axe-con/) digital accessibility conference. Over the course of two days, I attended multiple sessions about many different facets of accessibility. I mainly focused on the developer track at the conference, though I sampled a few talks from other tracks. Here are some of the highlights and what I took away from the sessions I attended.

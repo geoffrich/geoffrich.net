@@ -5,6 +5,9 @@ tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/svelte-$-meanings.png'
 metaDesc: 'Svelte uses $ for a lot of different concepts. Here’s how to tell the difference.'
+syndication:
+  - https://twitter.com/geoffrich_/status/1470439354392727555
+  - https://www.reddit.com/r/sveltejs/comments/rfi89x/the_many_meanings_of_in_svelte/
 ---
 
 If you're writing Svelte code, you'll notice that `$` can have multiple different meanings, depending on the context. For example, look at this code snippet &mdash; `$` is used in three different ways! If you're new to Svelte, or to JavaScript in general, it can be confusing to keep them all straight.

@@ -4,6 +4,9 @@ date: '2022-04-04'
 tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/clean-component-tips.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1511352238534533139
+  - https://www.reddit.com/r/sveltejs/comments/tww9ij/4_tips_for_cleaner_svelte_components/
 ---
 
 I've helped a few devs at my company get started with Svelte, and I love seeing how easy it is for them to pick it up and start being productive. However, I've noticed a few areas where they write verbose code without realizing that Svelte has a cleaner way to do the same thing.

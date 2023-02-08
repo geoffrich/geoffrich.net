@@ -5,6 +5,9 @@ tags:
   - svelte
   - react
 socialImage: 'https://geoffrich.net/images/social/4-things-i-miss-svelte.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1579478166384816131
+  - https://www.reddit.com/r/sveltejs/comments/y0g1p3/4_things_i_miss_from_svelte_after_working_in/
 ---
 
 I got a new job in August, and I'm really enjoying the new problem space and all the great people I work with! However, like most companies, they write their frontend in React. This took some getting used to after writing Svelte for so long. Here are four things from Svelte that I deeply miss when writing React code.

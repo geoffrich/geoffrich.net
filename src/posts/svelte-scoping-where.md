@@ -5,6 +5,9 @@ tags:
   - svelte
   - css
 socialImage: 'https://geoffrich.net/images/social/svelte-scoping-where.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1442877606164983809
+  - https://www.reddit.com/r/sveltejs/comments/pxawqe/how_to_improve_sveltes_style_scoping/
 ---
 
 _Or, alliteratively: Settling Svelte's style scoping specificity wars with :where_

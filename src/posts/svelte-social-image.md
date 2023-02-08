@@ -6,6 +6,10 @@ tags:
   - sveltekit
 socialImage: 'https://geoffrich.net/images/social/svelte-social-image.png'
 metaDesc: 'Generate custom og:images on-demand using Vercel’s Satori library'
+syndication:
+  - https://twitter.com/geoffrich_/status/1582383317231755264
+  - https://www.reddit.com/r/sveltejs/comments/y79bf0/create_dynamic_social_card_images_with_svelte/
+  - https://front-end.social/@geoffrich/109308942579752467
 ---
 
 When you share a blog post or site on social media, the first thing most people will see is a social card image, or "og:image". Adding one of these can massively increase the number of people who engage with your post. In the past, you either had to manually create these images or automatically generate them with a headless browser or service. However, Vercel recently [launched a library](https://vercel.com/blog/introducing-vercel-og-image-generation-fast-dynamic-social-card-images) that makes generating these images easier, faster, and cheaper. In this post, I’ll show you how you can use that library to generate social card images using Svelte components. Even though I’m focusing on Svelte, the concepts should transfer to any component framework that you can render to an HTML string.

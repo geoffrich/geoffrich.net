@@ -5,6 +5,9 @@ tags:
   - svelte
   - side project
 socialImage: 'https://geoffrich.net/images/social/marvel-unlimited-by-year.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1445060543597793283
+  - https://front-end.social/@geoffrich/109320745477434077
 ---
 
 _tl;dr I launched a [new site](https://marvel.geoffrich.net/) where you can see Marvel comics published in a [given year](https://marvel.geoffrich.net/year) and retrieve a [random comic](https://marvel.geoffrich.net/comic/random) available on the Marvel Unlimited app. The code is [open source](https://github.com/geoffrich/marvel-by-year) on GitHub._

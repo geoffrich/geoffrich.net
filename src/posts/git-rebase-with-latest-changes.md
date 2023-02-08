@@ -3,6 +3,9 @@ title: How to git rebase on main without switching branches
 date: '2023-02-04'
 tags:
   - git
+syndication:
+  - https://twitter.com/geoffrich_/status/1622271332766318593
+  - https://front-end.social/@geoffrich/109809437234802087
 ---
 
 This is just a quick TIL about updating your feature branch with changes from main without switching between branches.

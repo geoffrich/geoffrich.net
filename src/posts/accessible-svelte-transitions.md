@@ -6,6 +6,9 @@ tags:
   - a11y
   - js
 socialImage: 'https://geoffrich.net/images/social/accessible-svelte-transitions.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1371480217332551686
+  - https://www.reddit.com/r/sveltejs/comments/m5mxpm/how_to_prevent_sveltes_transitions_from/
 ---
 
 **Update 11/2021:** this post was adapted into a lightning talk I recorded for the [Fall 2021 Svelte Summit.](/posts/svelte-summit-2021/)

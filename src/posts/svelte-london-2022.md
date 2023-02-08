@@ -6,6 +6,8 @@ tags:
   - speaking
 templateEngineOverride: njk,md
 metaDesc: 'My meetup talk on native page transitions in SvelteKit.'
+syndication:
+  - https://twitter.com/geoffrich_/status/1562507795534327808
 ---
 
 {% set videoTitle = "Svelte London - August Meetup" %}

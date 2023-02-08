@@ -4,6 +4,8 @@ date: '2021-10-07'
 tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/rich-harris-jamstack-conf-2021.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1446152449417302020
 ---
 
 This is a transcription of Rich Harris' talk at [Jamstack Conf 2021](https://jamstackconf.com/). I've also added links to related content or topics as appropriate. You can watch the recording on [YouTube](https://www.youtube.com/watch?v=860d8usGC0o), and I highly recommend you do so&mdash;Rich is an engaging speaker, and there's some visual elements I couldn't capture in the text.

@@ -4,6 +4,9 @@ date: '2022-03-06'
 tags:
   - svelte
 socialImage: 'https://geoffrich.net/images/social/local-constants.png'
+syndication:
+  - https://twitter.com/geoffrich_/status/1500856298652545033
+  - https://www.reddit.com/r/sveltejs/comments/t8sojg/local_constants_in_svelte_with_the_const_tag/
 ---
 
 [Style directives](https://geoffrich.net/posts/style-directives/) weren't the only new feature introduced in Svelte 3.46! Let's take a look at the other recent addition to Svelte: [the @const tag](https://svelte.dev/docs#template-syntax-const).
@@ -243,5 +246,3 @@ Also note that at time of writing there are **still some open bugs** around this
 I've already found `@const` to be [very useful](https://github.com/geoffrich/generative-svg-grid/blob/0e3384cebfd42935f687ce8c69a0e495e19d6a1b/src/lib/Grid.svelte#L45-L57) to improve the readability of my code. Keep it in mind next time you're writing Svelte!
 
 The [original RFC](https://github.com/sveltejs/rfcs/pull/33) is well worth a read for some different perspectives on whether introducing this tag is a good idea or not. It's also interesting in context of RFCs [#32](https://github.com/sveltejs/rfcs/pull/32) (local &#60;style scoped&#62;) and [#34](https://github.com/sveltejs/rfcs/pull/34) (inline components). Taken together, these RFCs would allow including multiple components inside a single file. However, at time of writing, only #33 (local constants) has been accepted.
-
-This post was syndicated to <a rel="syndication" href="https://twitter.com/geoffrich_/status/1500856298652545033">Twitter</a>.
