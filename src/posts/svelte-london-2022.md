@@ -10,6 +10,12 @@ syndication:
   - https://twitter.com/geoffrich_/status/1562507795534327808
 ---
 
+<div class="callout">
+
+Disclaimer: this presentation was about an API that has since been renamed and had some breaking changes. See the [official explainer](https://developer.chrome.com/docs/web-platform/view-transitions/) for the most up-to-date information.
+
+</div>
+
 {% set videoTitle = "Svelte London - August Meetup" %}
 {% set videoId = "ua6gE2zPulw" %}
 {% include 'partials/components/youtube.njk' %}
