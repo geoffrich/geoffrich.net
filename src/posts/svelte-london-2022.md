@@ -3,7 +3,9 @@ title: Svelte London August 2022
 date: '2022-08-23'
 tags:
   - svelte
+  - sveltekit
   - speaking
+  - view transitions
 templateEngineOverride: njk,md
 metaDesc: 'My meetup talk on native page transitions in SvelteKit.'
 syndication:

@@ -4,6 +4,7 @@ date: '2022-09-19'
 tags:
   - svelte
   - sveltekit
+  - view transitions
 socialImage: 'https://geoffrich.net/images/social/page-transitions-1.png'
 metaDesc: 'Taking the experimental view transition API for a spin.'
 templateEngineOverride: njk,md
@@ -398,7 +399,7 @@ I’m excited for this API and the features it will unlock, even though it will 
 
 However, that shouldn’t stop you from implementing page transitions in your app today. It’s possible to use Svelte’s built-in transitions to achieve a similar effect. Simple transitions can be accomplished using a `#key` block and the built-in fade and fly transitions. For more details, see this guide from [Josh Collinsworth](https://joshcollinsworth.com/blog/build-static-sveltekit-markdown-blog#implement-page-transitions). And for some other impressive examples, see these demos from [pngwn](https://github.com/pngwn/svelte-travel-transitions/) and [Bob Fanger](https://github.com/bfanger/page-transitions-in-svelte).
 
-For a more advanced view transition example that I may write up in the future, see this [Svelte Summit video list](https://http-203-svelte.vercel.app/) demo [(source)](https://github.com/geoffrich/http-203-svelte).
+For some more examples of Svelte and the View Transition API, see [this post](/posts/view-transition-experiments/).
 
 ## Further reading
 
