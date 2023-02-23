@@ -6,7 +6,7 @@ tags:
   - sveltekit
   - view transitions
 metaDesc: 'Adding animation to Svelte apps using an experimental browser API.'
-templateEngineOverride: md
+templateEngineOverride: md,njk
 ---
 
 The [View Transitions API](https://developer.chrome.com/docs/web-platform/view-transitions/) (f.k.a. Shared Element Transitions) landed unflagged in [Chrome 111 Beta](https://developer.chrome.com/blog/chrome-111-beta/#view-transitions-api), so I figured it was time to return to some of my demos using the API in Svelte and SvelteKit!
