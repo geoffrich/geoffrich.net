@@ -9,7 +9,7 @@ templateEngineOverride: njk,md
 ---
 
 {% set videoTitle = "Svelte Summit 2023" %}
-{% set videoId = "0bog8-Ay7CU" %}
+{% set videoId = "K95TQ-Yh7Cw" %}
 {% include 'partials/components/youtube.njk' %}
 
 I spoke at the Spring 2023 [Svelte Summit](https://www.sveltesummit.com/) on Svelte and view transitions. The View Transitions API is an exciting new browser API that streamlines the process of animating between two page states. While the headline use case is page transitions, it can also be used for all sorts of animation in your Svelte app. In this talk, I show how you can replace Svelte’s built-in flip and crossfade animations with view transitions, as well as the pros of cons of each approach.
