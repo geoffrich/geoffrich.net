@@ -1,9 +1,8 @@
 {
   "items": [
     {
-      "text": "Twitter",
-      "url": "https://twitter.com/geoffrich_",
-      "external": true
+      "text": "Socials",
+      "url": "/socials"
     },
     {
       "text": "GitHub",
