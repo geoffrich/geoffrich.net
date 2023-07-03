@@ -3,7 +3,7 @@ title: Talking Svelte and open source on 20minJS
 date: '2022-04-13'
 tags:
   - svelte
-  - podcast
+  - speaking
 socialImage: 'https://geoffrich.net/images/social/20minjs.png'
 syndication:
   - https://twitter.com/geoffrich_/status/1514278257155198976

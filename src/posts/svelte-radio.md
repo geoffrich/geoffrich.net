@@ -3,7 +3,7 @@ title: 'Svelte Radio Episode 43: The other Rich! Geoff!'
 date: '2022-05-12'
 tags:
   - svelte
-  - podcast
+  - speaking
 socialImage: 'https://geoffrich.net/images/social/svelte-radio.png'
 ---
 
