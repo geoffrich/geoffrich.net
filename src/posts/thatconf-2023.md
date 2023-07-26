@@ -1,6 +1,6 @@
 ---
 title: 'THAT Conference WI 2023: Building Efficient, Resilient Web Apps With SvelteKit'
-date: '2023-07-12'
+date: '2023-07-26'
 tags:
   - sveltekit
   - speaking
