@@ -26,4 +26,4 @@ There's a lot we didn't get to, but hopefully this provides a good overview! The
 
 If you enjoyed this video, I recommend checking out the slides for the talk I gave at [THAT Conference](/posts/thatconf-2023/), where I build on the data loading and progressive enhancement concepts to build a nested "Favorite Albums" UI.
 
-In fact, both of my in-person talks last month (the other was at [SeattleJS](http://localhost:8081/posts/seattlejs-2023/)) used the Sveltunes demo, and that was intentional &mdash; better to build one demo you can reuse instead of three!
+In fact, both of my in-person talks last month (the other was at [SeattleJS](posts/seattlejs-2023/)) used the Sveltunes demo, and that was intentional &mdash; better to build one demo you can reuse instead of three!
