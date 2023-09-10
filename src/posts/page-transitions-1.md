@@ -15,19 +15,19 @@ syndication:
 
 <div class="callout">
 
-This post was updated in February 2023 to handle changes in the shared element transition API (now called view transitions).
+This post was updated in February 2023 to handle breaking changes in the view transitions API (previously called shared element transitions), and in September 2023 with a new [SvelteKit lifecycle method](https://svelte.dev/blog/view-transitions) that streamlines the setup process.
 
 </div>
 
-Chrome is currently experimenting with a new API that will let you easily animate between two different pages, which is a long-desired feature in browsers.
+Chrome now supports a new web API that will let you easily animate between two different pages, which is a long-desired feature in browsers.
 
 I’ve been experimenting with how to use this new browser API in [SvelteKit](https://kit.svelte.dev). Today I want to show you what I’ve been doing and how it works. I’ll only scratch the surface of this stuff, and I highly recommend reading [the official API explainer](https://developer.chrome.com/docs/web-platform/view-transitions/) if you want to learn more. Today we'll focus on page transitions, but this API can also be used to animate [_any_ change in DOM state](https://twitter.com/geoffrich_/status/1625897774859587585).
 
 This post is an adaptation of (a section of) [my talk](/posts/svelte-london-2022/) at the Svelte London meetup last month, though keep in mind that the talk version covers the old API, which has since gone through breaking changes.
 
-Be advised that this API is still experimental and is only available in Chrome Canary or Chrome 111 Beta at time of writing. It’s still very early in the process of becoming a web standard, so you shouldn’t rush out and use it on your production sites today. However, it’s still fun to play around with and figure out interesting ways to use it.
+Be advised that this API is only available in Chrome or Chromium-based browsers (e.g. Edge) at time of writing, though other browser vendors have expressed interest. It’s still very early, so it might not be ready for your production sites today. However, it _is_ a great candidate for progressive enhancement, since browsers that don't support the API can fall back to a regular navigation.
 
-For the TL;DR, here’s the [repo](https://github.com/geoffrich/sveltekit-view-transitions) and the [deployed demo](https://sveltekit-shared-element-transitions-codelab.vercel.app/). Make sure to read the note above about browser requirements. Also, the demo could break at any time if the API changes.
+For the TL;DR, here’s the [repo](https://github.com/geoffrich/sveltekit-view-transitions) and the [deployed demo](https://sveltekit-shared-element-transitions-codelab.vercel.app/). Make sure to read the note above about browser requirements.
 
 So: this new API, how does it work?
 
@@ -63,67 +63,65 @@ For SvelteKit, we’ll write a `preparePageTransition` function that will set ev
 <slot />
 ```
 
-Here’s what `preparePageTransition` looks like:
+Here's what `preparePageTransition` looks like:
 
 ```js
+import {onNavigate} from '$app/navigation';
 export const preparePageTransition = () => {
-  const navigation = getNavigationStore();
+  // before completing the navigation, start a new transition
+  onNavigate(navigation => {
+    if (!document.startViewTransition) return;
 
-  // before navigating, start a new transition
-  beforeNavigate(() => {
-    if (!document.startViewTransition) {
-      return;
-    }
-    const navigationComplete = navigation.complete();
-
-    document.startViewTransition(async () => {
-      await navigationComplete;
+    return new Promise(resolve => {
+      document.startViewTransition(async () => {
+        resolve();
+        await navigation.complete;
+      });
     });
   });
 };
 ```
 
-Surprisingly, it's not a lot of code! For those interested, let’s walk through it line by line. If you want to skip to writing some page transitions, jump to [the next section](#heading-in-a-sveltekit-app).
+Implementing this function used to be somewhat complicated, since there wasn't a good place in SvelteKit's lifecycle to start the view transition. [beforeNavigate](https://kit.svelte.dev/docs/modules#$app-navigation-beforenavigate) existed, but it ran _before_ any data fetching started, so a slow API call could force the user to wait multiple seconds for the transition to complete. SvelteKit 1.24 introduced [onNavigate](https://kit.svelte.dev/docs/modules#$app-navigation-onnavigate), which runs just before the navigation completes and is a perfect place to start a view transition.
+
+For those interested, let’s walk through it line by line. If you want to skip to writing some page transitions, jump to [the next section](#heading-in-a-sveltekit-app).
 
 ```js
-const navigation = getNavigationStore();
-```
-
-Here we get the navigation store, which is a custom store that extends the built in `navigating` store from SvelteKit. This store adds a `complete` method that will allow us to know when navigation has finished. If you’re curious, [here’s the implementation](https://github.com/geoffrich/sveltekit-view-transitions/blob/bd1e84a7cb0325bf3096b977ee3d7ce2e48041d3/src/lib/page-transition.js#L5-L33).
-
-```js
-beforeNavigate(() => {
+onNavigate(() => {
   // ...
 });
 ```
 
-This queues some code to run before every navigation. See the [SvelteKit docs](https://kit.svelte.dev/docs/modules#$app-navigation-beforenavigate) for more.
+This queues some code to run on every navigation, immediately before the new page is rendered. Importantly, it will run after any data loading for the page has completed – since starting a view transition prevents any interaction with the page, we want to start it as late as possible. See the [SvelteKit docs](https://kit.svelte.dev/docs/modules#$app-navigation-onnavigate) for more.
 
 ```js
-if (!document.startViewTransition) {
-  return;
-}
+if (!document.startViewTransition) return;
 ```
 
 If the browser doesn’t support view transitions, we don’t perform a page transition.
 
 ```js
-const navigationComplete = navigation.complete();
-
-document.startViewTransition(async () => {
-  await navigationComplete;
+return new Promise(resolve => {
+  document.startViewTransition(async () => {
+    resolve();
+    await navigation.complete;
+  });
 });
 ```
 
-This is the most important section, and parallels the pseudocode I showed earlier. We create and start the transition using the view transition APIs. Inside the callback passed to `start`, we wait for the navigation to complete using the custom navigation store. Once navigation has finished, the browser transitions between the two states.
+By returning a promise from `onNavigate`, we suspend the navigation until that promise resolves. This lets us wait to complete the navigation until the view transition has started. We use a [promise constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/Promise) so that we can control when the promise resolves.
+
+Inside the promise constructor, we start the view transition. Inside the view transition callback we resolve the promise we just returned, which indicates to SvelteKit that it should finish the navigation. It’s important that the navigation waits to finish until after we start the view transition – the browser needs to snapshot the old state so it can transition to the new state.
+
+Finally, inside the view transition callback we wait for SvelteKit to finish the navigation by awaiting the provided `navigation.complete` promise. Once `navigation.complete` resolves, the new page has been loaded into the DOM and the browser can animate between the two states.
 
 This isn’t that much code, and you won’t have to interact with it directly. From this point on, you can assume the page transition will happen and set up the page accordingly.
 
 ## In a SvelteKit App
 
-Okay, let’s write some page transitions! If you want to follow along, clone the `initial` branch of [this repo](https://github.com/geoffrich/sveltekit-view-transitions/tree/initial), which is the demo we’ll be working off of today. It’s based off a [codelab](https://codelabs.developers.google.com/create-an-instant-and-seamless-web-app#5) from the Chrome team, which I re-wrote using SvelteKit. You’ll also need either Chrome Canary or a beta version. This demo also happens to use Tailwind since the codelab I forked included it, though I took it out of the code samples in this post for brevity's sake.
+Okay, let’s write some page transitions! If you want to follow along, clone the `initial` branch of [this repo](https://github.com/geoffrich/sveltekit-view-transitions/tree/initial), which is the demo we’ll be working off of today. It’s based off a [codelab](https://codelabs.developers.google.com/create-an-instant-and-seamless-web-app#5) from the Chrome team, which I re-wrote using SvelteKit. You’ll also need Chrome or another Chromium-based browser. This demo also happens to use Tailwind since the codelab I forked included it, though I took it out of the code samples in this post for brevity's sake.
 
-For a preview of what we’re building, check out the [deployed demo](https://sveltekit-shared-element-transitions-codelab.vercel.app/) (again, only works in Chrome Canary/beta).
+For a preview of what we’re building, check out the [deployed demo](https://sveltekit-shared-element-transitions-codelab.vercel.app/) (again, only works in Chromium browsers).
 
 This is a pretty simple app &mdash; it displays a list of fruits, and each fruit has its own page with nutrition facts about the fruit.
 
@@ -387,12 +385,6 @@ We should also wrap this code in a [prefers-reduced-motion](https://developer.mo
 
 Here’s the final [repo](https://github.com/geoffrich/sveltekit-view-transitions) and [deployed demo](https://sveltekit-shared-element-transitions-codelab.vercel.app/).
 
-## One caveat
-
-There is one caveat with this current integration with SvelteKit. Because starting a page transition makes the page non-interactive, you want it to resolve as quickly as possible. However, we currently start the transition in `beforeNavigate`, which runs _before_ any data fetching starts. If you have a slow API, the user could be waiting for multiple seconds with a frozen page, which is definitely non-ideal. This wasn’t an issue in this demo since all the data is local, but would become an issue in any application with dynamic data.
-
-There is a [SvelteKit feature request](https://github.com/sveltejs/kit/issues/5689) to improve this by adding a lifecycle method that occurs after data loading has completed, so this could be a non-issue in the future. Also, using [preloading](https://kit.svelte.dev/docs/link-options#data-sveltekit-preload-data) and [streaming in non-essential data](https://kit.svelte.dev/docs/load#streaming-with-promises) can help pages load more quickly.
-
 ## Wrapping up
 
 I’m excited for this API and the features it will unlock, even though it will be a while before it becomes a spec and is implemented cross-browser.
@@ -403,8 +395,9 @@ For some more examples of Svelte and the View Transition API, see [this post](/p
 
 ## Further reading
 
-Note: these resources deal with the old shared-element-transition flavor of the API and are out of date. See the [Chrome explainer](https://developer.chrome.com/docs/web-platform/view-transitions/) or the [draft of the spec](https://github.com/WICG/view-transitions) for the most up-to-date information.
+Note: some of these resources deal with the old shared-element-transition flavor of the API and are out of date. See the [Chrome explainer](https://developer.chrome.com/docs/web-platform/view-transitions/) or the [draft of the spec](https://github.com/WICG/view-transitions) for the most up-to-date information.
 
 - [Google I/O talk](https://youtu.be/JCJUPJ_zDQ4)
 - [Miriam Suzanne](https://www.oddbird.net/2022/06/29/shared-elements/)
 - [Astro and the Shared Element Transition API](https://www.maxiferreira.com/blog/astro-page-transitions/)
+- [Unlocking view transitions in SvelteKit 1.24](https://svelte.dev/blog/view-transitions)
