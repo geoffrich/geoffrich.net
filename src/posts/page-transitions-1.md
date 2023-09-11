@@ -1,12 +1,12 @@
 ---
-title: 'Native Page Transitions in SvelteKit'
+title: 'Page Transitions in SvelteKit with the View Transitions API'
 date: '2022-09-19'
 tags:
   - svelte
   - sveltekit
   - view transitions
 socialImage: 'https://geoffrich.net/images/social/page-transitions-1.png'
-metaDesc: 'Taking the experimental view transition API for a spin.'
+metaDesc: 'Using a new browser API to create slick, animated page transitions.'
 templateEngineOverride: njk,md
 syndication:
   - https://twitter.com/geoffrich_/status/1572225315065036800
