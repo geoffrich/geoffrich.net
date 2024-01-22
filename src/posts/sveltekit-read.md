@@ -1,6 +1,6 @@
 ---
-title: "How SvelteKit's new read function simplifies reading assets on the server"
-metaDesc: 'Updating an old Svelte social image demo for SvelteKit 2.4'
+title: Reading assets on the server in SvelteKit
+metaDesc: "How SvelteKit 2.4's new read function simplifies things"
 date: '2024-01-21'
 tags:
   - sveltekit
