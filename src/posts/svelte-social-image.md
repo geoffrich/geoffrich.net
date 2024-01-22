@@ -12,6 +12,12 @@ syndication:
   - https://front-end.social/@geoffrich/109308942579752467
 ---
 
+<div class="callout">
+
+This post was updated in January 2024 to use SvelteKit's new `read` method to read font data on the server.
+
+</div>
+
 When you share a blog post or site on social media, the first thing most people will see is a social card image, or "og:image". Adding one of these can massively increase the number of people who engage with your post. In the past, you either had to manually create these images or automatically generate them with a headless browser or service. However, Vercel recently [launched a library](https://vercel.com/blog/introducing-vercel-og-image-generation-fast-dynamic-social-card-images) that makes generating these images easier, faster, and cheaper. In this post, I’ll show you how you can use that library to generate social card images using Svelte components. Even though I’m focusing on Svelte, the concepts should transfer to any component framework that you can render to an HTML string.
 
 ## What is og:image?
@@ -68,7 +74,7 @@ While the details here can get a little tricky, that’s not a lot of code! The 
 
 With the overview out of the way, let’s drill into the details.
 
-> Warning: both Satori and satori-html are pre-v1, so there could be breaking changes. This demo has been developed with `satori@0.0.42` and `satori-html@0.2.0`.
+> Warning: both Satori and satori-html are pre-v1, so there could be breaking changes. This demo has been developed with `satori@0.10.11` and `satori-html@0.3.2`.
 
 ## Getting started
 
@@ -97,6 +103,9 @@ Create a new file at `src/routes/og/+server.js` and paste in the following code:
 import satori from 'satori';
 import {Resvg} from '@resvg/resvg-js';
 import NotoSans from '$lib/NotoSans-Regular.ttf';
+import {read} from '$app/server';
+
+const fontData = read(NotoSans).arrayBuffer();
 
 const height = 630;
 const width = 1200;
@@ -114,7 +123,7 @@ export const GET = async () => {
     fonts: [
       {
         name: 'Noto Sans',
-        data: Buffer.from(NotoSans),
+        data: await fontData,
         style: 'normal'
       }
     ],
@@ -139,39 +148,13 @@ export const GET = async () => {
 };
 ```
 
-This creates a [SvelteKit server route](https://kit.svelte.dev/docs/routing#server) that will generate OG images for us.
+This creates a [SvelteKit server route](https://kit.svelte.dev/docs/routing#server) that will generate OG images for us. We're using SvelteKit's [read](https://kit.svelte.dev/docs/modules#$app-server-read) function to retrieve the raw font data. For more on how this function works, see [my post about it](/posts/sveltekit-read/).
 
-You might notice that we’re importing the font. This isn’t a valid import in regular JavaScript, so we’ll need to add a [custom Vite plugin](https://vitejs.dev/guide/api-plugin.html) that turns that import into the font data Satori requires. Open `vite.config.js` and add the following code:
+<div class="callout">
 
-```js
-import {sveltekit} from '@sveltejs/kit/vite';
-import fs from 'fs';
+This post originally used a custom Vite plugin to retrieve the font data since it was written before the `read` function existed. If you're using a SvelteKit version that doesn't support `read` (&lt;2.4), you can reverse the changes in [this PR](https://github.com/geoffrich/sveltekit-og-post/pull/1/commits/3cf96e3a281463e03545bf3df7b96e14aeb72dda) to get back to the old method.
 
-/** @type {import('vite').UserConfig} */
-const config = {
-  plugins: [sveltekit(), rawFonts(['.ttf'])]
-};
-
-function rawFonts(ext) {
-  return {
-    name: 'vite-plugin-raw-fonts',
-    transform(code, id) {
-      if (ext.some(e => id.endsWith(e))) {
-        const buffer = fs.readFileSync(id);
-        return {code: `export default ${JSON.stringify(buffer)}`, map: null};
-      }
-    }
-  };
-}
-
-export default config;
-```
-
-This will replace any import of a `.ttf` file with an export of the raw buffer data. If you need to import fonts elsewhere in your app, you may need to update this to only transform fonts needed for og:image generation. I did try Vite’s [?raw import syntax](https://vitejs.dev/guide/assets.html#importing-asset-as-string) instead of a custom plugin, but that didn’t return the right format for Satori.
-
-You can also fetch the font at runtime, either [locally](https://github.com/geoffrich/sveltekit-satori/blob/f9bb379ae9bae69a34fe30d6dda129c50d29b005/src/routes/satori/%2Bserver.js#L10-L31) or [from Google fonts](https://github.com/kvnang/workers-og/blob/28aa4225ccc85967afe812c50b89f8fbbb9aea89/packages/workers-og/src/font.ts). By bundling it with the app, we trade off a slightly larger server size for slightly less latency. If you expect to use multiple fonts, fetching at runtime may be a better solution.
-
-(This is the part of the demo I’m _least_ confident in, so if you have alternate solutions, please let me know. Thanks to [Matt Jennings](https://mattjennings.io/) for [showing me](https://twitter.com/mattjennings44/status/1580981430276227073) the custom Vite plugin approach!)
+</div>
 
 With that change, you should be able to run the app and navigate to `/og` and see the generated "Hello, world!" image.
 
@@ -328,5 +311,3 @@ Here are some other fun examples that use Satori:
 - I [made a demo](https://sveltekit-satori.vercel.app/) that generates a random pattern of colored dots based on a seed in the URL
 - My [Marvel Comics side project](https://marvel.geoffrich.net/) creates [a social card for each year of comics](https://github.com/geoffrich/marvel-by-year/pull/8) with a random selection of covers from that year
 - It’s not just social card images&mdash;Satori can also be used to make a [syntax highlighter](https://satori-syntax-highlighter.vercel.app/)
-
-I’m hoping to move this blog’s social images over to this method once I finish my SvelteKit rewrite (WIP!)
