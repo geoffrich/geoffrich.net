@@ -5,6 +5,7 @@ date: '2024-06-21'
 tags:
   - svelte
   - speaking
+socialImage: 'https://geoffrich.net/images/social/cascadiajs-2024.jpeg'
 ---
 
 I gave a talk at [CascadiaJS 2024](https://cascadiajs.com/2024) on what's new in Svelte 5. What follows is a full transcript of the talk. You can also grab [the slides](https://drive.google.com/drive/folders/14EgoTzgKL_PCmtp8pRQEv2e-99RenKbw) (Keynote and PDF available).
