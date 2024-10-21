@@ -2,6 +2,7 @@
 title: 'CascadiaJS 2024: Optimize for vibes'
 description: 'Svelte 5 and the new age of Svelte'
 date: '2024-06-21'
+templateEngineOverride: njk,md
 tags:
   - svelte
   - speaking
