@@ -8,9 +8,13 @@ tags:
 socialImage: 'https://geoffrich.net/images/social/cascadiajs-2024.jpeg'
 ---
 
+{% set videoTitle = "Optimize for Vibes: Svelte 5 and the New Age of Svelte" %}
+{% set videoId = "PQluuawldDE" %}
+{% include 'partials/components/youtube.njk' %}
+
 I gave a talk at [CascadiaJS 2024](https://cascadiajs.com/2024) on what's new in Svelte 5. What follows is a full transcript of the talk. You can also grab [the slides](https://drive.google.com/drive/folders/14EgoTzgKL_PCmtp8pRQEv2e-99RenKbw) (Keynote and PDF available).
 
-I'll update this with the talk video when it's posted, but you should be able to find it in the [day 2 livestream](https://www.youtube.com/live/o2VQXBI_yk8).
+I gave this talk before Svelte 5 [was officially released](https://github.com/sveltejs/svelte/releases/tag/svelte%405.0.0), but it should still be largely applicable.
 
 > Let's look at what's new in Svelte 5 and how it makes Svelte apps more performant, more scalable, and easier to reason about. We'll also unpack why the changes were made and how they were rolled out.
 
